@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 if [ $# != 1 ]; then
-  echo "Usage: setup.sh <tag-name>"
+  echo "Usage: vmcreate.sh <build-tag>"
   echo "Note: contrail nightly build tag must be provided. The latest nightly build tag can be"
   echo "found at https://hub.docker.com/r/opencontrailnightly/contrail-openstack-neutron-init/tags"
   exit 1
@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision :ansible do |ansible|
-    ansible.playbook = "ansible-provisioner/provision.yml"
+    ansible.playbook = "all_in_one/provision.yml"
   end
 
   config.vm.provision :shell do |shell|

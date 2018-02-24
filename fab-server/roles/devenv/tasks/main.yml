@@ -1,0 +1,22 @@
+---
+- name: git clone contrail-dev-env
+  git:
+    repo: 'https://github.com/Juniper/contrail-dev-env.git'
+    dest: /root/contrail-dev-env
+    update: no
+
+- name: run startup.sh to install dev containers
+  shell: cd /root/contrail-dev-env && ./startup.sh
+
+#- name: copy the script to start build
+#  copy:
+#    src: scons_build.sh
+#    dest: /tmp/scons_build.sh
+#
+#- name: copy the script to start build
+#  file:
+#    path: /tmp/scons_build.sh
+#    mode: 755
+#
+#- name: setup dev container
+#  shell: script=$(cat /tmp/scons_build.sh) && docker exec contrail-developer-sandbox bash -l -c "$script" > /tmp/scons.log

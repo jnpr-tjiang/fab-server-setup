@@ -1,28 +1,13 @@
 ---
 - name: Install epel-release
-  yum: 
+  yum:
     name: epel-release
-    state: latest
-
-- name: Install python-jinja2
-  yum: 
-    name: python-jinja2
-    state: latest
-
-- name: Install centos-release-openstack-ocata
-  yum: 
-    name: centos-release-openstack-ocata
     state: latest
 
 - name: Install ansible-2.3.1.0
   yum: 
     name: ansible-2.3.1.0
     state: present
-
-- name: Install python-oslo-config
-  yum: 
-    name: python-oslo-config
-    state: latest
 
 - name: Install git
   yum: 
@@ -49,9 +34,14 @@
     name: tmux
     state: latest
 
-- name: Install net-tools
+- name: Install tree
   yum: 
-    name: net-tools
+    name: tree
+    state: latest
+
+- name: Install vim
+  yum: 
+    name: vim
     state: latest
 
 - name: Upgrade pip
@@ -59,15 +49,27 @@
     name: pip
     state: latest
 
-- name: Install latest jinja2
-  pip: 
-    name: jinja2
-    state: latest
-
-- name: Install modprobe ip_vs
-  command: modprobe ip_vs
-
 - name: Update tmux config
   template:
     src: tmux.conf.j2
     dest: /root/.tmux.conf
+
+- name: Install gnome desktop
+  yum:
+    name: "@^GNOME Desktop"
+    state: present
+
+- command: ln -sf /lib/systemd/system/runlevel5.target /etc/systemd/system/graphical.target
+
+- name: Reboot server
+  command: /sbin/shutdown -r +1
+  async: 0
+  poll: 0
+  ignore_errors: true
+
+- name: sleep for 65 seconds and continue with play
+  wait_for: timeout=65
+  delegate_to: localhost
+
+- name: Wait for the server to finish rebooting
+  local_action: wait_for host="{{ ansible_host }}" search_regex=OpenSSH port=22 timeout=600

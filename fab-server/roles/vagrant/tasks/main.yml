@@ -1,0 +1,38 @@
+---
+  - name: "Installing the required packages for vbox"
+    yum: pkg={{ item }} state=installed
+    with_items:
+    - gcc
+    - dkms
+    - make
+    - qt
+    - libgomp
+    - patch
+    - kernel-headers
+    - kernel-devel
+    - binutils
+    - glibc-headers
+    - glibc-devel
+    - fontforge
+
+  - name: add vbox repo
+    shell: cd /etc/yum.repos.d/ && wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo
+
+  - name: install vbox
+    yum: pkg={{ item }} state=installed
+    with_items:
+      - VirtualBox-5.1
+      - kernel-devel-3.10.0-693.el7.x86_64
+
+  - command: /sbin/rcvboxdrv setup
+
+  - name: install vagrant
+    yum:
+      name: https://releases.hashicorp.com/vagrant/1.9.6/vagrant_1.9.6_x86_64.rpm
+      state: present
+
+  - name: git clone contrail-dev-env
+    git:
+      repo: 'https://github.com/jnpr-tjiang/fab-server-setup.git'
+      dest: /root/fab-server-setup
+      update: no
