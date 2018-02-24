@@ -1,0 +1,6 @@
+all_in_one_node: "10.155.75.27"
+interface_name: "eth1"
+container_registry: "opencontrailnightly"
+contrail_version: "master-20180222083805-centos7-ocata"
+ntp_server: "172.21.200.60"
+gateway_ip: "10.155.95.254"

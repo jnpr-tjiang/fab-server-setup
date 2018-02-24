@@ -1,0 +1,21 @@
+contrail_configuration:
+  CONTAINER_REGISTRY: {{ container_registry }}
+  CONTRAIL_VERSION: {{ contrail_version }}
+  CONTROLLER_NODES: {{ all_in_one_node }}
+  CLOUD_ORCHESTRATOR: openstack
+  AUTH_MODE: keystone
+  KEYSTONE_AUTH_ADMIN_PASSWORD: c0ntrail123
+  KEYSTONE_AUTH_HOST: {{ all_in_one_node }}
+  KEYSTONE_AUTH_URL_VERSION: "/v3"
+  RABBITMQ_NODE_PORT: 5673
+  PHYSICAL_INTERFACE: {{ interface_name }}
+  VROUTER_GATEWAY: {{ gateway_ip }}
+roles:
+  {{ all_in_one_node }}:
+    config_database:
+    config:
+    control:
+    webui:
+    analytics:
+    analytics_database:
+    vrouter:
