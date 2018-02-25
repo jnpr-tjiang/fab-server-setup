@@ -1,4 +1,4 @@
-all_in_one_node: "10.155.75.27"
+all_in_one_node: "10.155.75.29"
 interface_name: "eth1"
 container_registry: "opencontrailnightly"
 contrail_version: "master-20180222083805-centos7-ocata"
