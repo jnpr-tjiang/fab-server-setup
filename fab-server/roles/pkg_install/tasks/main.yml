@@ -55,9 +55,7 @@
     dest: /root/.tmux.conf
 
 - name: Install gnome desktop
-  yum:
-    name: "@^GNOME Desktop"
-    state: present
+  command: yum -y groupinstall "GNOME Desktop"
 
 - command: ln -sf /lib/systemd/system/runlevel5.target /etc/systemd/system/graphical.target
 
