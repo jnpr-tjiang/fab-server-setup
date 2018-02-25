@@ -4,7 +4,7 @@
   gather_facts: no
   become: True
   roles:
-#    - reimage
+    - reimage
     - network
     - pkg_install
     - vncsetup
