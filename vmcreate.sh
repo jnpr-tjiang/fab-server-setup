@@ -107,7 +107,7 @@ ansible-playbook -i inventory/all-in-one -e@../etc/kolla/globals.yml -e@../etc/k
 EOF
 
 # update group_vars/all.yml
-cat << EOF > ansible-provisioner/group_vars/all.yml
+cat << EOF > all_in_one/group_vars/all.yml
 all_in_one_node: "$ip"
 interface_name: "$interface"
 container_registry: "opencontrailnightly"
