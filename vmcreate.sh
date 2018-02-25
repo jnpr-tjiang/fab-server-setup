@@ -117,7 +117,4 @@ gateway_ip: "$gateway_ip"
 EOF
 
 # bring up the VM
-timespent=$(time vagrant up)
-echo "***********************************************************"
-echo "* Total Time Spent: $timespent"
-echo "***********************************************************"
+vagrant up

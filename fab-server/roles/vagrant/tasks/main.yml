@@ -18,8 +18,10 @@
   - name: add vbox repo
     shell: cd /etc/yum.repos.d/ && wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo
 
+  - command: yum -y install VirtualBox-5.1
+
   - name: install vbox
-    yum: pkg={{ item }} state=installed
+    yum: name={{ item }} state=installed
     with_items:
       - VirtualBox-5.1
       - kernel-devel-3.10.0-693.el7.x86_64

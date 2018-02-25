@@ -1,10 +1,12 @@
 ---
 - name: Provision fab server
   hosts: "{{ server }}"
+  gather_facts: no
   become: True
   roles:
-#    - network
-#    - pkg_install
-#    - vncsetup
-#    - devenv 
+#    - reimage
+    - network
+    - pkg_install
+    - vncsetup
+    - devenv 
     - vagrant
