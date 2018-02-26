@@ -49,4 +49,17 @@ The VM ip is based on the fab-server name. If the fab server name is fab-server0
 - IP for the VM on fab-server08:  10.155.75.28
 - IP for the VM on fab-server09:  10.155.75.29
 
-
+## Re-image fab-server
+To re-image a fab-server, you need go to fab-server03 and run the following commnands:
+```
+$ cd fab-server-setup/fab-server
+$ ansible-playbook --extra-vars server=<fab server name> provision_fab_server.yml 
+```
+Here are the valid fab server names: 
+- `ab-server02`
+- `ab-server04`
+- `ab-server05`
+- `ab-server06`
+- `ab-server07`
+- `ab-server08`
+- `ab-server09`
