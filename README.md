@@ -46,13 +46,13 @@ $ cd /root/fab-server-setup
 $ vagrant ssh
 ```
 The VM ip is based on the fab-server name. 
-- `fab-server02:  10.155.75.22`
-- `fab-server04:  10.155.75.24`
-- `fab-server05:  10.155.75.25`
-- `fab-server06:  10.155.75.26`
-- `fab-server07:  10.155.75.27`
-- `fab-server08:  10.155.75.28`
-- IP for the VM on fab-server09:  10.155.75.29
+- `fab-server02`:  `10.155.75.22`
+- `fab-server04`:  `10.155.75.24`
+- `fab-server05`:  `10.155.75.25`
+- `fab-server06`:  `10.155.75.26`
+- `fab-server07`:  `10.155.75.27`
+- `fab-server08`:  `10.155.75.28`
+- `fab-server09`:  `10.155.75.29`
 
 ## Re-image fab-server
 To re-image a fab-server, you need go to fab-server03 and run the following commnands:
@@ -61,10 +61,10 @@ $ cd /root/fab-server-setup/fab-server
 $ ansible-playbook --extra-vars server=<fab server name> provision_fab_server.yml 
 ```
 Here are the valid fab server names: 
-- `ab-server02`
-- `ab-server04`
-- `ab-server05`
-- `ab-server06`
-- `ab-server07`
-- `ab-server08`
-- `ab-server09`
+- `fab-server02`
+- `fab-server04`
+- `fab-server05`
+- `fab-server06`
+- `fab-server07`
+- `fab-server08`
+- `fab-server09`
