@@ -40,7 +40,12 @@ $ sh vmcreate.sh <tag name>
 ```
 
 #### How do I access the VM?
-The VM ip is based on the fab-server name. If the fab server name is fab-server07, then IP for the contrail VM is 10.155.75.27. 
+To access the VM from the fab-server:
+```
+$ cd /root/fab-server-setup
+$ vagrant ssh
+```
+The VM ip is based on the fab-server name. 
 - IP for the VM on fab-server02:  10.155.75.22
 - IP for the VM on fab-server04:  10.155.75.24
 - IP for the VM on fab-server05:  10.155.75.25
