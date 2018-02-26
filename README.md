@@ -68,3 +68,6 @@ Here are the valid fab server names:
 - `fab-server07`
 - `fab-server08`
 - `fab-server09`
+
+## Code commit
+Lanuch pad: https://bugs.launchpad.net/juniperopenstack
