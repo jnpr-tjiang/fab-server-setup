@@ -2,6 +2,29 @@ fab-server setup
 ================
 ![fab-server](images/fab-server.png)
 
+## Contrail developer sandbox
+Attach to the developer sandbox and build contrail:
+```
+$ docker ps 
+$ docker attach contrail-developer-sandbox
+$ cd contrail
+$ scons --kernel-dir=$KERNELDIR
+```
+To start the sandbox VM if it is down. 
+```
+$ cd contrail-dev-env
+$ sh startup.sh
+```
+Once you attach to the sandbox container, there is only one shell to work with. So it is recommended to use tmux so that you can have multiple shells. Here are the tmux cheatsheet:
+```
+ctrl-a w  # list all windows
+ctrl-a c  # create a new window
+ctrl-a d  # detach from tmux
+ctrl-a n  # go to next window
+ctrl-a p  # go to previous window
+ctrl-a 1  # go to the first window
+```
+
 ## Contrail VM
 Here are the steps to create target VM loaded with Contrail nightly build:
 1. Destroy the existing vagrant VM
@@ -18,12 +41,12 @@ $ sh vmcreate.sh <tag name>
 
 #### How do I access the VM?
 The VM ip is based on the fab-server name. If the fab server name is fab-server07, then IP for the contrail VM is 10.155.75.27. 
-- fab-server02:  10.155.75.22
-- fab-server04:  10.155.75.24
-- fab-server05:  10.155.75.25
-- fab-server06:  10.155.75.26
-- fab-server07:  10.155.75.27
-- fab-server08:  10.155.75.28
-- fab-server09:  10.155.75.29
+- IP for the VM on fab-server02:  10.155.75.22
+- IP for the VM on fab-server04:  10.155.75.24
+- IP for the VM on fab-server05:  10.155.75.25
+- IP for the VM on fab-server06:  10.155.75.26
+- IP for the VM on fab-server07:  10.155.75.27
+- IP for the VM on fab-server08:  10.155.75.28
+- IP for the VM on fab-server09:  10.155.75.29
 
 
