@@ -52,7 +52,7 @@ The VM ip is based on the fab-server name. If the fab server name is fab-server0
 ## Re-image fab-server
 To re-image a fab-server, you need go to fab-server03 and run the following commnands:
 ```
-$ cd fab-server-setup/fab-server
+$ cd /root/fab-server-setup/fab-server
 $ ansible-playbook --extra-vars server=<fab server name> provision_fab_server.yml 
 ```
 Here are the valid fab server names: 
