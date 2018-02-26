@@ -46,12 +46,12 @@ $ cd /root/fab-server-setup
 $ vagrant ssh
 ```
 The VM ip is based on the fab-server name. 
-- IP for the VM on fab-server02:  10.155.75.22
-- IP for the VM on fab-server04:  10.155.75.24
-- IP for the VM on fab-server05:  10.155.75.25
-- IP for the VM on fab-server06:  10.155.75.26
-- IP for the VM on fab-server07:  10.155.75.27
-- IP for the VM on fab-server08:  10.155.75.28
+- `fab-server02:  10.155.75.22`
+- `fab-server04:  10.155.75.24`
+- `fab-server05:  10.155.75.25`
+- `fab-server06:  10.155.75.26`
+- `fab-server07:  10.155.75.27`
+- `fab-server08:  10.155.75.28`
 - IP for the VM on fab-server09:  10.155.75.29
 
 ## Re-image fab-server
