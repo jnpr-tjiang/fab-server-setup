@@ -70,4 +70,26 @@ Here are the valid fab server names:
 - `fab-server09`
 
 ## Code commit
-Lanuch pad: https://bugs.launchpad.net/juniperopenstack
+Here are the steps to commit code to contrail-controller:
+#### Step 1: Create a bug in launch pad
+Please add as much details as possible about the bug to fix or feature to add. Here is the link to Contrail launchpad:  https://bugs.launchpad.net/juniperopenstack
+#### Step 2: Sync the latest code to the sandbox container
+```
+$ docker attach contrail-developer-sandbox
+$ cd /root/contrail
+$ repo sync
+```
+#### Step 3: Create a twig branch for the bug fix or feature
+```
+$ cd /root/contrail/controller
+$ git checkout -b <bug-id> # replace <bug-id> with the bug id from Step 1.
+```
+Now you can make code changes in this twig branch
+#### Step 4: Submit code to gerrit for reivew
+1. Make sure git-review is installed in the sandbox container.
+```
+$ pip install git-review
+```
+2. Generate ssh key via `ssh-keygen` on the sandbox container and Upload the generated public key to https://review.opencontrail.org. 
+![review](images/review.png)
+
