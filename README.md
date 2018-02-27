@@ -40,13 +40,56 @@ $ sh vmcreate.sh <tag name>
 ```
 
 #### How do I access the VM?
-The VM ip is based on the fab-server name. If the fab server name is fab-server07, then IP for the contrail VM is 10.155.75.27. 
-- IP for the VM on fab-server02:  10.155.75.22
-- IP for the VM on fab-server04:  10.155.75.24
-- IP for the VM on fab-server05:  10.155.75.25
-- IP for the VM on fab-server06:  10.155.75.26
-- IP for the VM on fab-server07:  10.155.75.27
-- IP for the VM on fab-server08:  10.155.75.28
-- IP for the VM on fab-server09:  10.155.75.29
+To access the VM from the fab-server:
+```
+$ cd /root/fab-server-setup
+$ vagrant ssh
+```
+The VM ip is based on the fab-server name. 
+- `fab-server02`:  `10.155.75.22`
+- `fab-server04`:  `10.155.75.24`
+- `fab-server05`:  `10.155.75.25`
+- `fab-server06`:  `10.155.75.26`
+- `fab-server07`:  `10.155.75.27`
+- `fab-server08`:  `10.155.75.28`
+- `fab-server09`:  `10.155.75.29`
 
+## Re-image fab-server
+To re-image a fab-server, you need go to fab-server03 and run the following commnands:
+```
+$ cd /root/fab-server-setup/fab-server
+$ ansible-playbook --extra-vars server=<fab server name> provision_fab_server.yml 
+```
+Here are the valid fab server names: 
+- `fab-server02`
+- `fab-server04`
+- `fab-server05`
+- `fab-server06`
+- `fab-server07`
+- `fab-server08`
+- `fab-server09`
+
+## Code commit
+Here are the steps to commit code to contrail-controller:
+#### Step 1: Create a bug in launch pad
+Please add as much details as possible about the bug to fix or feature to add. Here is the link to Contrail launchpad:  https://bugs.launchpad.net/juniperopenstack
+#### Step 2: Sync the latest code to the sandbox container
+```
+$ docker attach contrail-developer-sandbox
+$ cd /root/contrail
+$ repo sync
+```
+#### Step 3: Create a twig branch for the bug fix or feature
+```
+$ cd /root/contrail/controller
+$ git checkout -b <bug-id> # replace <bug-id> with the bug id from Step 1.
+```
+Now you can make code changes in this twig branch
+#### Step 4: Submit code to gerrit for reivew
+1. Make sure git-review is installed in the sandbox container.
+```
+$ pip install git-review
+```
+2. Generate ssh key via `ssh-keygen` on the sandbox container and Upload the generated public key to https://review.opencontrail.org. 
+![review](images/review.png)
 
