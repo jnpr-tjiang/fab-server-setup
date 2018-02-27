@@ -86,15 +86,15 @@ $ git checkout -b <bug-id> # replace <bug-id> with the bug id from Step 1.
 ```
 Now you can make code changes in this twig branch
 #### Step 4: Submit code to gerrit for reivew
-1. Make sure git-review is installed in the sandbox container.
+1. **Make sure git-review is installed in the sandbox container.**
 ```
 $ pip install git-review
 ```
 
-2. Generate ssh key via `ssh-keygen` on the sandbox container and Upload the generated public key to https://review.opencontrail.org. 
+2. **Generate ssh key via `ssh-keygen` on the sandbox container and Upload the generated public key to https://review.opencontrail.org.**
 ![review](images/review.png)
 
-3. Commit the change to local git via `git commit -a` with commit comments that follows the convention below:
+3. **Commit the change to local git via `git commit -a` with commit comments that follows the convention below:**
 ```
 [DM] <short description of the commit that should not exceed 80 characters> 
 <add multi-line detailed descriptions. You can list all the feature added by this commit or root cause of the bug this commit is trying to fix>
@@ -105,7 +105,7 @@ Partial-Bug: #<bug-id>
 - `#<bug-id>` should be the bug id from Step 1
 - `Partial-Bug` is the directive to set the bug status. `Partial-Bug` means not to change the bug status. `Closes-Bug` means to close the bug after the commit is merged to the master.
 
-4. Submit code for review
+4. **Submit code for review**
 ```
 $ git review
 ```
@@ -114,3 +114,4 @@ To submit more changes to the existing review, you need to use `--amend` to amen
 $ git commit -a --amend
 $ git review
 ```
+To check the submitted review, please go to https://review.opencontrail.org.
