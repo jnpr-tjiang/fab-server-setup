@@ -44,7 +44,10 @@ To access the VM from the fab-server:
 ```
 $ cd /root/fab-server-setup
 $ vagrant ssh
+$ su
+password: vagrant
 ```
+
 The VM ip is based on the fab-server name. 
 - `fab-server02`:  `10.155.75.22`
 - `fab-server04`:  `10.155.75.24`
