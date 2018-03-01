@@ -118,3 +118,6 @@ $ git commit -a --amend
 $ git review
 ```
 To check the submitted review, please go to https://review.opencontrail.org.
+
+## Debug API server
+Here is WIKI for debugging API server container: https://github.com/jnpr-tjiang/fab-server-setup/wiki/Debug-API-server
