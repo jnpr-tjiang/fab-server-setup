@@ -10,7 +10,7 @@ fi
 # initialize variables
 tag=$1
 interface=eth1
-ip=$(ip address|grep inet|grep eno1|awk '{print $2}'|awk -F '/' '{print $1}'|awk -F '.' -v x=$(expr $(hostname|cut -b 11-) + 20) '{print $1"."$2"."$3"."x}')
+ip=$(ip address|grep inet|grep eno1|awk '{print $2}'|awk -F '/' '{print $1}'|awk -F '.' -v x=$(expr ${HOSTNAME: -2} + 20) '{print $1"."$2"."$3"."x}')
 gateway_ip=$(ip route | grep default | awk '{print $3}')
 ntp_server=172.21.200.60
 EOF=EOF
