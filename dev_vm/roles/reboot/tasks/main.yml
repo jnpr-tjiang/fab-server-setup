@@ -1,0 +1,13 @@
+---
+- name: Reboot server
+  command: /sbin/shutdown -r +1
+  async: 0
+  poll: 0
+  ignore_errors: true
+
+- name: sleep for 65 seconds and continue with play
+  wait_for: timeout=65
+  delegate_to: localhost
+
+- name: Wait for the server to finish rebooting
+  local_action: wait_for host="{{ ansible_host }}" search_regex=OpenSSH port=22 timeout=600
