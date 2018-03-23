@@ -1,4 +1,7 @@
 ---
+- name: Allow root SSH
+  shell: sed -i '/#PermitRootLogin/c\PermitRootLogin yes' /etc/ssh/sshd_config && systemctl restart sshd
+
 - name: git clone contrail-kolla-ansible version contrail/ocata
   git:
     repo: 'https://github.com/Juniper/contrail-kolla-ansible.git'
@@ -26,3 +29,4 @@
   template:
     src: group_vars_container_hosts.j2
     dest: /root/contrail-ansible-deployer/inventory/group_vars/container_hosts.yml
+

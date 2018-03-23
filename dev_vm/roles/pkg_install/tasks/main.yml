@@ -44,6 +44,11 @@
     name: vim
     state: latest
 
+- name: Install patch
+  yum:
+    name: patch
+    state: latest
+
 - name: Upgrade pip
   pip: 
     name: pip
