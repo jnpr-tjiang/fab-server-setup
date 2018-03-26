@@ -4,6 +4,11 @@
     name: epel-release
     state: latest
 
+- name: Install python-devel
+  yum:
+    name: python-devel
+    state: latest
+
 - name: Install python-jinja2
   yum: 
     name: python-jinja2
@@ -66,3 +71,6 @@
   template:
     src: tmux.conf.j2
     dest: /root/.tmux.conf
+
+- name: Install fab pkgs
+  script: install_fab_pkgs.sh
