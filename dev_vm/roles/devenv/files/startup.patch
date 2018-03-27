@@ -12,7 +12,7 @@ index 9bb4a87..8031977 100755
 +   yum install -y docker-ce
 +   echo 'OPTIONS="--storage-opt dm.basesize=20G"' >> /etc/sysconfig/docker
     systemctl stop firewalld || true
--   sed -i 's/DOCKER_STORAGE_OPTIONS=/DOCKER_STORAGE_OPTIONS=--storage-opt dm.basesize=20G /g' /etc/sysconfig/docker-storage
+-   sed -i 's/DOCKER_STORAGE_OPTIONS=/DOCKER_STORAGE_OPTIONS=--storage-opt dm.basesize=200G /g' /etc/sysconfig/docker-storage
     systemctl start docker
  fi
  
