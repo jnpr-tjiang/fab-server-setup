@@ -1,76 +1,58 @@
 fab-server setup
 ================
-![fab-server](images/fab-server.png)
+![fab-server](images/fab-server-v2.png)
 
-## Contrail developer sandbox
-Attach to the developer sandbox and build contrail:
+## Dev VM
+This is the VM that contains the Contrail developer sandbox Docker container. Here are the steps to get into the dev VM as root user: 
 ```
-$ docker ps 
-$ docker attach contrail-developer-sandbox
-$ cd contrail
-$ scons --kernel-dir=$KERNELDIR
+$ cd /root/fab-server-setup/dev_vm
+$ vagrant ssh
+$ su
+password: vagrant
 ```
+Once inside the dev VM as root, here are the steps to get into developer sandbox Docker container and run `scons` to build Contrail
+```
+$ docker exec -it contrail-developer-sandbox bash
+$ cd /root/contrail
+$ scons
+```
+
 To start the sandbox VM if it is down. 
 ```
-$ cd contrail-dev-env
-$ sh startup.sh
-```
-Once you attach to the sandbox container, there is only one shell to work with. So it is recommended to use tmux so that you can have multiple shells. Here are the tmux cheatsheet:
-```
-ctrl-a w  # list all windows
-ctrl-a c  # create a new window
-ctrl-a d  # detach from tmux
-ctrl-a n  # go to next window
-ctrl-a p  # go to previous window
-ctrl-a 1  # go to the first window
+$ docker restart contrail-developer-sandbox
 ```
 
-## Contrail VM
+## Contrail all_in_one VM
 Here are the steps to create target VM loaded with Contrail nightly build:
 1. Destroy the existing vagrant VM
 ```
-$ cd /root/fab-server-setup
+$ cd /root/fab-server-setup/all_in_one
 $ vagrant destroy
 ```
-2. Go to https://hub.docker.com/r/opencontrailnightly/contrail-openstack-neutron-init/tags/ and copy the tag name for the nightly build.
-3. Run `vmcreate.sh` script to spawn the VM loaded with the nightly build
+2. Go to https://hub.docker.com/r/opencontrailnightly/contrail-openstack-neutron-init/tags/ and copy the tag name for the nightly build. Or you can use tag name `latest` for the latest nightly build.
+3. Run `create_contrail_vm.sh` script to spawn the VM loaded with the nightly build
 ```
-$ cd /root/fab-server-setup
-$ sh vmcreate.sh <tag name>
+$ cd /root/fab-server-setup/all_in_one
+$ sh create_contrail_vm.sh <tag name>
 ```
 
 #### How do I access the VM?
 To access the VM from the fab-server:
 ```
-$ cd /root/fab-server-setup
+$ cd /root/fab-server-setup/all_in_one
 $ vagrant ssh
 $ su
 password: vagrant
 ```
 
 The VM ip is based on the fab-server name. 
-- `fab-server02`:  `10.155.75.22`
-- `fab-server04`:  `10.155.75.24`
-- `fab-server05`:  `10.155.75.25`
-- `fab-server06`:  `10.155.75.26`
-- `fab-server07`:  `10.155.75.27`
-- `fab-server08`:  `10.155.75.28`
-- `fab-server09`:  `10.155.75.29`
-
-## Re-image fab-server
-To re-image a fab-server, you need go to fab-server03 and run the following commnands:
-```
-$ cd /root/fab-server-setup/fab-server
-$ ansible-playbook --extra-vars server=<fab server name> provision_fab_server.yml 
-```
-Here are the valid fab server names: 
-- `fab-server02`
-- `fab-server04`
-- `fab-server05`
-- `fab-server06`
-- `fab-server07`
-- `fab-server08`
-- `fab-server09`
+- `fab-server02`:  `10.155.75.32`
+- `fab-server04`:  `10.155.75.34`
+- `fab-server05`:  `10.155.75.35`
+- `fab-server06`:  `10.155.75.36`
+- `fab-server07`:  `10.155.75.37`
+- `fab-server08`:  `10.155.75.38`
+- `fab-server09`:  `10.155.75.39`
 
 ## Code commit
 Here are the steps to commit code to contrail-controller:
@@ -121,3 +103,7 @@ To check the submitted review, please go to https://review.opencontrail.org.
 
 ## Debug API server
 Here is WIKI for debugging API server container: https://github.com/jnpr-tjiang/fab-server-setup/wiki/Debug-API-server
+
+## Setup SSH Access
+For easier accessibility, you should setup SSH access for the developer VM and all in one VM.
+Refer to the instructions here [Setup-SSH](Setup-SSH.md)

@@ -4,9 +4,9 @@
     name: epel-release
     state: latest
 
-- name: Install ansible-2.3.1.0
+- name: Install ansible-2.4.2.0
   yum: 
-    name: ansible-2.3.1.0
+    name: ansible-2.4.2.0
     state: present
 
 - name: Install git
@@ -42,6 +42,11 @@
 - name: Install vim
   yum: 
     name: vim
+    state: latest
+
+- name: Install patch
+  yum:
+    name: patch
     state: latest
 
 - name: Upgrade pip
