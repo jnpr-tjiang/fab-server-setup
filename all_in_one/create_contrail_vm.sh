@@ -39,23 +39,11 @@ Vagrant.configure("2") do |config|
     end
 
     contrail.vm.provision :shell do |shell|
-      shell.path = "run/kolla-bootstrap.sh"
+      shell.path = "run/install_contrail_kolla_requirements.sh"
     end
-  
-    contrail.vm.provision :shell do |shell|
-      shell.path = "run/ntp.sh"
-    end
-  
-    contrail.vm.provision :shell do |shell|
-      shell.path = "run/deploy-kolla.sh"
-    end
-  
+
     contrail.vm.provision :shell do |shell|
       shell.path = "run/deploy-contrail.sh"
-    end
-  
-    contrail.vm.provision :shell do |shell|
-      shell.path = "run/post-deploy.sh"
     end
   end
 end
@@ -77,38 +65,21 @@ DNS2=172.21.200.60
 DOMAIN=englab.juniper.net spglab.juniper.net jnpr.net juniper.net
 $EOF
 systemctl restart network.service
+echo "contrail123" | passwd --stdin root
 EOF
 
-# generate script to invoke contrail deployment playbooks
-cat << EOF > run/ntp.sh
-echo "-----------Configure NTP---------------------------------"
-cd /root/contrail-ansible-deployer
-ansible-playbook -e '{"CONFIGURE_VMS":true}' -e '{"CONTAINER_VM_CONFIG":{"network":{"ntpserver":"$ntp_server"}}}' -t configure_vms -i inventory/ playbooks/deploy.yml
-EOF
-
-cat << EOF > run/kolla-bootstrap.sh
-echo "-----------Kolla Bootstrap-------------------------------"
-cd /root/contrail-kolla-ansible/ansible
-ansible-playbook -i inventory/all-in-one -e@../etc/kolla/globals.yml -e@../etc/kolla/passwords.yml -e action=bootstrap-servers kolla-host.yml
-EOF
-
-cat << EOF > run/deploy-kolla.sh
-echo "-----------Install contrail kolla containers-------------"
-cd /root/contrail-kolla-ansible/ansible
-ansible-playbook -i inventory/all-in-one -e@../etc/kolla/globals.yml -e@../etc/kolla/passwords.yml -e action=deploy site.yml
-EOF
-
-cat << EOF > run/deploy-contrail.sh
-echo "-----------Install contrail containers-------------------"
+# Install Contrail and Kolla requirements
+cat << EOF > run/install_contrail_kolla_requirements.sh
+echo "-----------Install contrail & kolla requirements-------------------"
 cd ~/contrail-ansible-deployer
-ansible-playbook -e '{"CREATE_CONTAINERS":true}' -i inventory/ playbooks/deploy.yml
+ansible-playbook -i inventory/ playbooks/configure_instances.yml
 EOF
 
-cat << EOF > run/post-deploy.sh
-echo "-----------Post deployment-------------------------------"
-cd ~/contrail-kolla-ansible/ansible
-ansible-playbook -i inventory/all-in-one -e@../etc/kolla/globals.yml -e@../etc/kolla/passwords.yml -e action=deploy post-deploy.yml
-ansible-playbook -i inventory/all-in-one -e@../etc/kolla/globals.yml -e@../etc/kolla/passwords.yml -e action=deploy post-deploy-contrail.yml
+# Deploy contrail and kolla containers
+cat << EOF > run/deploy-contrail.sh
+echo "-----------Deploy contrail containers-------------------"
+cd ~/contrail-ansible-deployer
+ansible-playbook -i inventory/ -e orchestrator=openstack playbooks/install_contrail.yml
 EOF
 
 # update group_vars/all.yml

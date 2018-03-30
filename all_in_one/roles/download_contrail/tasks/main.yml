@@ -1,13 +1,22 @@
 ---
 - name: Allow root SSH
-  shell: sed -i '/#PermitRootLogin/c\PermitRootLogin yes' /etc/ssh/sshd_config && systemctl restart sshd
+  replace: 
+    path: /etc/ssh/sshd_config
+    regexp: '^#PermitRootLogin yes'
+    replace: 'PermitRootLogin yes'
+    backup: yes
 
-- name: git clone contrail-kolla-ansible version contrail/ocata
-  git:
-    repo: 'https://github.com/Juniper/contrail-kolla-ansible.git'
-    dest: /root/contrail-kolla-ansible
-    version: contrail/ocata
-    update: no
+- name: Enable password authentication
+  replace: 
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication no'
+    replace: 'PasswordAuthentication yes'
+    backup: yes
+
+- name: Restart sshd
+  systemd:
+    name: sshd
+    state: restarted
 
 - name: git clone contrail-ansible-deployer
   git:
@@ -15,18 +24,7 @@
     dest: /root/contrail-ansible-deployer
     update: no
 
-- name: populate contrail-kolla-ansible/etc/kolla/globals.yml
+- name: populate contrail-ansible-deployer/config/instances.yaml
   template:
-    src: etc_kolla_globals.j2
-    dest: /root/contrail-kolla-ansible/etc/kolla/globals.yml
-
-- name: populate contrail-ansible-deployer/inventory/hosts
-  template:
-    src: inventory_hosts.j2
-    dest: /root/contrail-ansible-deployer/inventory/hosts
-
-- name: populate contrail-ansible-deployer/inventory/group_vars/container_hosts.yml
-  template:
-    src: group_vars_container_hosts.j2
-    dest: /root/contrail-ansible-deployer/inventory/group_vars/container_hosts.yml
-
+    src: config_instances.j2
+    dest: /root/contrail-ansible-deployer/config/instances.yaml

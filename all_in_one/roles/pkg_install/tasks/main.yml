@@ -72,5 +72,5 @@
     src: tmux.conf.j2
     dest: /root/.tmux.conf
 
-- name: Install fab pkgs
-  script: install_fab_pkgs.sh
+#- name: Install fab pkgs
+#  script: install_fab_pkgs.sh
