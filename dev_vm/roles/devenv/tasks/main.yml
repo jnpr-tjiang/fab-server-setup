@@ -31,11 +31,6 @@
     replace: 'dm.basesize=200G'
     backup: yes
 
-- name: patch startup.sh script to use docker-ce
-  patch:
-    src: startup.patch
-    dest: /root/contrail-dev-env/startup.sh
-
 - name: run startup.sh to install dev containers
   shell: cd /root/contrail-dev-env && ./startup.sh
 
