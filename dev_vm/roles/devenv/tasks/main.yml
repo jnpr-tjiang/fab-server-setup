@@ -32,13 +32,10 @@
     backup: yes
 
 - name: run startup.sh to install dev containers
-  shell: cd /root/contrail-dev-env && ./startup.sh
+  shell: cd /root/contrail-dev-env && ./startup.sh -b && ./vm-dev-env/init.sh
 
 - name: auto start docker.server at boot
   systemd: name=docker enabled=yes
-
-- name: Setup SSH for contrail-developer-sandbox
-  shell: docker run -d -p 6622:22 -v /var/run/docker.sock:/var/run/docker.sock -e FILTERS={\"name\":[\"^/contrail-developer-sandbox$\"]} -e AUTH_MECHANISM=noAuth jeroenpeeters/docker-ssh
 
 #- name: copy the script to start build
 #  copy:
