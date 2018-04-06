@@ -93,4 +93,5 @@ gateway_ip: "$gateway_ip"
 EOF
 
 # bring up the VM
+vagrant plugin install vagrant-vbguest
 vagrant up
