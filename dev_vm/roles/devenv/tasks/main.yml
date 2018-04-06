@@ -1,12 +1,35 @@
 ---
 - name: Allow root SSH
-  shell: sed -i '/#PermitRootLogin/c\PermitRootLogin yes' /etc/ssh/sshd_config && systemctl restart sshd
+  replace: 
+    path: /etc/ssh/sshd_config
+    regexp: '^#PermitRootLogin yes'
+    replace: 'PermitRootLogin yes'
+    backup: yes
+
+- name: Enable password authentication
+  replace: 
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication no'
+    replace: 'PasswordAuthentication yes'
+    backup: yes
+
+- name: Restart sshd
+  systemd:
+    name: sshd
+    state: restarted
 
 - name: git clone contrail-dev-env
   git:
     repo: 'https://github.com/Juniper/contrail-dev-env.git'
     dest: /root/contrail-dev-env
     update: no
+
+- name: Increase docker base size to 200G
+  replace: 
+    path: /root/contrail-dev-env/startup.sh
+    regexp: 'dm\.basesize=20G'
+    replace: 'dm.basesize=200G'
+    backup: yes
 
 - name: patch startup.sh script to use docker-ce
   patch:
