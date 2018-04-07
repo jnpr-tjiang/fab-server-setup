@@ -1,6 +1,6 @@
-all_in_one_node: "10.155.75.33"
+all_in_one_node: "10.155.75.46"
 interface_name: "eth1"
 container_registry: "opencontrailnightly"
-contrail_version: "latest"
+contrail_version: "ocata-master-54"
 ntp_server: "172.21.200.60"
 gateway_ip: "10.155.95.254"
