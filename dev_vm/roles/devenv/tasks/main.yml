@@ -32,7 +32,7 @@
     backup: yes
 
 - name: run startup.sh to install dev containers
-  shell: cd /root/contrail-dev-env && ./startup.sh -b && ./vm-dev-env/init.sh
+  shell: cd /root/contrail-dev-env && (./startup.sh -b || true) && ./vm-dev-env/init.sh
 
 - name: auto start docker.server at boot
   systemd: name=docker enabled=yes
