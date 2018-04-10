@@ -26,6 +26,10 @@ Vagrant.configure("2") do |config|
     dev.vm.provision :ansible do |ansible|
       ansible.playbook = "provision_dev_vm.yml"
     end
+
+    dev.vm.provision :shell do |shell|
+      shell.path = "/tmp/authorized-keys.sh"
+    end
   end
 end
 EOF
@@ -48,5 +52,13 @@ $EOF
 systemctl restart network.service
 EOF
 
+# add authorized keys
+authorized_keys=$(cat ~/.ssh/authorized_keys)
+cat << EOF > /tmp/authorized-keys.sh
+sudo mkdir -p /root/.ssh
+sudo echo "$authorized_keys" >> /root/.ssh/authorized_keys
+EOF
+
 # bring up the VM
+vagrant plugin install vagrant-vbguest
 vagrant up
