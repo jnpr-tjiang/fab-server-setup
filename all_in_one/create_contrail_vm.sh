@@ -1,16 +1,29 @@
 #!/bin/bash 
 
-if [ $# != 1 ]; then
-  echo "Usage: create_contrail_vm.sh <build-tag>"
-  echo "Note: contrail nightly build tag must be provided. The latest nightly build tag can be"
-  echo "found at https://hub.docker.com/r/opencontrailnightly/contrail-openstack-neutron-init/tags"
+if [ $# != 2 ]; then
+  echo "Usage: create_contrail_vm.sh <build-tag> <target-vm-ip>"
+  echo "<build-tag>:"
+  echo "   contrail nightly build tag must be provided. The latest nightly build tag can be"
+  echo "   found at https://hub.docker.com/r/opencontrailnightly/contrail-openstack-neutron-init/tags"
+  echo "<target-vm-ip>: "
+  echo "   Please choose an ip from the folowing assigned ip ranges. The convention is choose the " 
+  echo "   first ip for the dev_vm, next 4 ips for the target vms, and rest ips for vMX, vQFX, etc."
+  echo "      Ankur:   10.155.75.40 - 10.155.75.49"
+  echo "      Sirisha: 10.155.75.50 - 10.155.75.59"
+  echo "      Sahana:  10.155.75.60 - 10.155.75.69"
+  echo "      Supriya: 10.155.75.70 - 10.155.75.79"
+  echo "      Tong:    10.155.75.80 - 10.155.75.89"
+  echo "      Rishabh: 10.155.75.90 - 10.155.75.99"
+  echo "      Sridevi: 10.155.75.100 - 10.155.75.109"
+  echo "      Joe:     10.155.75.110 - 10.155.75.119"
+  echo "      Akshaya: 10.155.75.120 - 10.155.75.129"
   exit 1
 fi
 
 # initialize variables
 tag=$1
 interface=eth1
-contrail_vm_ip=$(ip address|grep inet|grep eno1|awk '{print $2}'|awk -F '/' '{print $1}'|awk -F '.' -v x=$(expr $(hostname|cut -b 11-) + 30) '{print $1"."$2"."$3"."x}')
+contrail_vm_ip=$2
 gateway_ip=$(ip route | grep default | awk '{print $3}')
 ntp_server=172.21.200.60
 EOF=EOF
