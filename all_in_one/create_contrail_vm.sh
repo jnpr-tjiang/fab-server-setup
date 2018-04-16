@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "contrail" do |contrail|
     contrail.vm.provider "virtualbox" do |v|
       v.memory=64000
-      v.cpus = 10
+      v.cpus = 8
     end
 
     contrail.vm.network "public_network", auto_config: false, bridge: 'eno1'
