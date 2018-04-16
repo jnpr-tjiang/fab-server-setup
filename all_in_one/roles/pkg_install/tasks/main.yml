@@ -4,70 +4,12 @@
     name: epel-release
     state: latest
 
-- name: Install python-devel
-  yum:
-    name: python-devel
-    state: latest
-
-- name: Install python-jinja2
-  yum: 
-    name: python-jinja2
-    state: latest
-
-- name: Install centos-release-openstack-ocata
-  yum: 
-    name: centos-release-openstack-ocata
-    state: latest
-
 - name: Install ansible-2.4.2.0
   yum: 
     name: ansible-2.4.2.0
     state: present
 
-- name: Install python-oslo-config
-  yum: 
-    name: python-oslo-config
-    state: latest
-
 - name: Install git
   yum: 
     name: git
     state: latest
-
-- name: Install net-tools
-  yum: 
-    name: net-tools
-    state: latest
-
-- name: Install wget
-  yum: 
-    name: wget
-    state: latest
-
-- name: Install python-pip
-  yum: 
-    name: python-pip
-    state: latest
-
-- name: Install tmux
-  yum: 
-    name: tmux
-    state: latest
-
-- name: Upgrade pip
-  pip: 
-    name: pip
-    state: latest
-
-- name: Install latest jinja2
-  pip: 
-    name: jinja2
-    state: latest
-
-- name: Install modprobe ip_vs
-  command: modprobe ip_vs
-
-- name: Update tmux config
-  template:
-    src: tmux.conf.j2
-    dest: /root/.tmux.conf

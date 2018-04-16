@@ -8,6 +8,9 @@ instances:
   bms1:
     provider: bms
     ip: {{ all_in_one_node }}
+global_configuration:
+  CONTAINER_REGISTRY: ci-repo.englab.juniper.net:5000
+  REGISTRY_PRIVATE_INSECURE: True
 contrail_configuration:
   CONTRAIL_VERSION: {{ contrail_version }}
   RABBITMQ_NODE_PORT: 5673
