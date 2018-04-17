@@ -44,7 +44,7 @@ Vagrant.configure("2") do |config|
     contrail.vm.network "public_network", auto_config: false, bridge: 'eno1'
 
     contrail.vm.provision :shell do |shell|
-      shell.path="/tmp/contrail-vm-init.sh"
+      shell.path="run/contrail-vm-init.sh"
     end
 
     contrail.vm.provision :ansible do |ansible|
@@ -52,22 +52,22 @@ Vagrant.configure("2") do |config|
     end
 
     contrail.vm.provision :shell do |shell|
-      shell.path = "/tmp/install_contrail_kolla_requirements.sh"
+      shell.path = "run/install_contrail_kolla_requirements.sh"
     end
 
     contrail.vm.provision :shell do |shell|
-      shell.path = "/tmp/deploy-contrail.sh"
+      shell.path = "run/deploy-contrail.sh"
     end
 
     contrail.vm.provision :shell do |shell|
-      shell.path = "/tmp/authorized-keys.sh"
+      shell.path = "run/authorized-keys.sh"
     end
   end
 end
 EOF
 
 # generate the standup script to be invoked after the dev VM is spawned
-cat << EOF > /tmp/contrail-vm-init.sh
+cat << EOF > run/contrail-vm-init.sh
 # configure interface $interface
 cat << EOF > /etc/sysconfig/network-scripts/ifcfg-$interface
 DEVICE="$interface"
@@ -86,14 +86,14 @@ echo "contrail123" | passwd --stdin root
 EOF
 
 # Install Contrail and Kolla requirements
-cat << EOF > /tmp/install_contrail_kolla_requirements.sh
+cat << EOF > run/install_contrail_kolla_requirements.sh
 echo "-----------Install contrail & kolla requirements-------------------"
 cd ~/contrail-ansible-deployer
 ansible-playbook -i inventory/ playbooks/configure_instances.yml
 EOF
 
 # Deploy contrail and kolla containers
-cat << EOF > /tmp/deploy-contrail.sh
+cat << EOF > run/deploy-contrail.sh
 echo "-----------Deploy contrail containers-------------------"
 cd ~/contrail-ansible-deployer
 ansible-playbook -i inventory/ -e orchestrator=openstack playbooks/install_contrail.yml
@@ -111,7 +111,7 @@ EOF
 
 # add authorized keys
 authorized_keys=$(cat ~/.ssh/authorized_keys)
-cat << EOF > /tmp/authorized-keys.sh
+cat << EOF > run/authorized-keys.sh
 sudo echo "$authorized_keys" >> /root/.ssh/authorized_keys
 EOF
 
