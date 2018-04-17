@@ -1,0 +1,21 @@
+---
+- name: Clone contrail-ansible-deployer
+  git:
+    repo: 'https://github.com/Juniper/contrail-ansible-deployer.git'
+    dest: /root/contrail-ansible-deployer
+    update: no
+
+- name: Populate contrail-ansible-deployer/config/instances.yaml
+  template:
+    src: config_instances.j2
+    dest: /root/contrail-ansible-deployer/config/instances.yaml
+
+- name: Configure contrail deployment
+  command: >
+    ansible-playbook -i inventory/ -e orchestrator=openstack playbooks/configure_instances.yml
+    chdir=/root/contrail-ansible-deployer
+
+- name: Install contrail
+  command: >
+    ansible-playbook -i inventory/ -e orchestrator=openstack playbooks/install_contrail.yml
+    chdir=/root/contrail-ansible-deployer

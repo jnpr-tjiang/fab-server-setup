@@ -1,0 +1,12 @@
+---
+- name: git clone contrail-dev-env
+  git:
+    repo: 'https://github.com/Juniper/contrail-dev-env.git'
+    dest: /root/contrail-dev-env
+    update: no
+
+- name: run startup.sh to install dev containers
+  shell: cd /root/contrail-dev-env && (./startup.sh -b || true) && ./vm-dev-env/init.sh
+
+- name: auto start docker.server at boot
+  systemd: name=docker enabled=yes

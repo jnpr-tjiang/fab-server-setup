@@ -1,0 +1,43 @@
+---
+- name: Check if libevent is installed
+  command: ldconfig -p | grep libevent-2.0
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  register: libevent
+
+- name: Force install if libevent not found or is older
+  set_fact:
+    libevent_install: true
+  when: libevent.rc != 0
+
+- name: Download libevent-2.0.22-stable
+  get_url:
+    url: https://github.com/libevent/libevent/releases/download/release-2.0.22-stable/libevent-2.0.22-stable.tar.gz
+    dest: /root/libevent-2.0.22-stable.tar.gz
+  when: libevent_install
+
+- name: Expand libevent archive
+  unarchive:
+    src: /root/libevent-2.0.22-stable.tar.gz
+    dest: /root
+    creates: /root/libevent-2.0.22-stable
+    copy: no
+  when: libevent_install
+
+- name: Build libevent
+  command: >
+    {{ item }}
+    chdir=/root/libevent-2.0.22-stable
+  with_items:
+    - ./configure
+    - make
+  when: libevent_install
+
+- name: Install libevent
+  command: >
+    make {{ item }}
+    chdir=/root/libevent-2.0.22-stable
+  with_items:
+    - install
+  when: libevent_install
