@@ -1,0 +1,30 @@
+---
+- name: Install net-tools
+  yum:
+    name: net-tools
+    state: latest
+
+- name: Install wget
+  yum:
+    name: wget
+    state: latest
+
+- name: Install python-pip
+  yum:
+    name: python-pip
+    state: latest
+
+- name: Install tree
+  yum:
+    name: tree
+    state: latest
+
+- name: Install vim
+  yum:
+    name: vim
+    state: latest
+
+- name: Upgrade pip
+  pip:
+    name: pip
+    state: latest

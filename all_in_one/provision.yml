@@ -1,7 +1,0 @@
----
-- name: provisioning the target node
-  hosts: all
-  become: True
-  roles:
-    - pkg_install
-    - download_contrail

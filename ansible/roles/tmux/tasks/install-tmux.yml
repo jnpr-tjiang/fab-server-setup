@@ -1,0 +1,43 @@
+---
+- name: Get tmux installed version
+  command: tmux -V
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  register: tmux
+
+- name: Force install if tmux not found or is older
+  set_fact:
+    tmux_install: true
+  when: (tmux.rc != 0) or (tmux.stdout | regex_replace("^.*?([0-9\.]+)$", "\\1") | version_compare('2.6', '<'))
+
+- name: Download tmux-2.6
+  get_url:
+    url: https://github.com/tmux/tmux/releases/download/2.6/tmux-2.6.tar.gz
+    dest: /root/tmux-2.6.tar.gz
+  when: tmux_install
+
+- name: Expand tmux archive
+  unarchive:
+    src: /root/tmux-2.6.tar.gz
+    dest: /root
+    creates: /root/tmux-2.6
+    copy: no
+  when: tmux_install
+
+- name: Build tmux
+  command: >
+    {{ item }}
+    chdir=/root/tmux-2.6
+  with_items:
+    - ./configure
+    - make
+  when: tmux_install
+
+- name: Install tmux
+  command: >
+    make {{ item }}
+    chdir=/root/tmux-2.6
+  with_items:
+    - install
+  when: tmux_install

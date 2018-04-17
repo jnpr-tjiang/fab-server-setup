@@ -1,0 +1,9 @@
+---
+- import_tasks: install-libevent.yml
+
+- name: Install ncurses-devel
+  yum: 
+    name: ncurses-devel
+    state: present
+
+- import_tasks: install-tmux.yml
