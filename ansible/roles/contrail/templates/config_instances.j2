@@ -1,6 +1,6 @@
 provider_config:
   bms:
-    ssh_pwd: c0ntrail123
+    ssh_pwd: contrail123
     ssh_user: root
     ntpserver: {{ ntp_server }}
     domainsuffix: local
@@ -8,6 +8,16 @@ instances:
   bms1:
     provider: bms
     ip: {{ vm_ip }}
+    roles:
+      config_database:
+      config:
+      control:
+      analytics_database:
+      analytics:
+      webui:
+      vrouter:
+      openstack:
+      openstack_compute:
 global_configuration:
   CONTAINER_REGISTRY: ci-repo.englab.juniper.net:5000
   REGISTRY_PRIVATE_INSECURE: True
