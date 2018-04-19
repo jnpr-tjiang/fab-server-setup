@@ -28,3 +28,18 @@
   pip:
     name: pip
     state: latest
+
+- name: Install git review
+  pip:
+    name: git-review
+    state: latest
+
+- name: Install tox
+  pip:
+    name: tox
+    state: latest
+
+- name: Install geventhttpclient
+  pip:
+    name: geventhttpclient
+    state: latest
