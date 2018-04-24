@@ -66,6 +66,14 @@ Vagrant.configure("2") do |config|
           contrail_version: "$tag"
       }
     end
+EOF
+    if [ "$name" == "all" ]; then
+        cat << EOF >> $DIR/"$name"_vm/Vagrantfile
+
+    $name.vm.provision "shell", path: "ansible/$name.sh"
+EOF
+    fi
+    cat << EOF >> $DIR/"$name"_vm/Vagrantfile
   end
 end
 EOF
