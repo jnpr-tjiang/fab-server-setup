@@ -9,6 +9,11 @@
     name: wget
     state: latest
 
+- name: Install python-devel
+  yum:
+    name: python-devel
+    state: latest
+
 - name: Install python-pip
   yum:
     name: python-pip
