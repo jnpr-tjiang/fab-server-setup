@@ -38,25 +38,25 @@ print_usage() {
 }
 
 generate_vagrantfile() {
-    local name=$1
-    local memory=$2
-    local cpus=$3
+    local user=$1
+    local name=$2
+    local memory=$3
+    local cpus=$4
+    local vagrantfile="$user"_"$name"_Vagrantfile
 
-    mkdir -p $DIR/"$name"_vm
-
-    cat << EOF > $DIR/"$name"_vm/Vagrantfile
+    cat << EOF > $DIR/vagrant_vm/$vagrantfile
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
 
-  config.vm.define "$name-$user_id" do |$name|
-    $name.vm.provider "virtualbox" do |v|
+  config.vm.define "$user_id-$name" do |m|
+    m.vm.provider "virtualbox" do |v|
       v.memory = $memory
       v.cpus = $cpus
     end
 
-    $name.vm.network "public_network", auto_config: false, bridge: '$host_interface'
+    m.vm.network "public_network", auto_config: false, bridge: '$host_interface'
 
-    $name.vm.provision :ansible do |ansible|
+    m.vm.provision :ansible do |ansible|
       ansible.playbook = "ansible/$name.yml"
       ansible.extra_vars = {
           vm_interface: "$interface",
@@ -68,24 +68,28 @@ Vagrant.configure("2") do |config|
     end
 EOF
     if [ "$name" == "all" ]; then
-        cat << EOF >> $DIR/"$name"_vm/Vagrantfile
+        cat << EOF >> $DIR/vagrant_vm/$vagrantfile
 
-    $name.vm.provision "shell", path: "ansible/$name.sh"
+    m.vm.provision "shell", path: "ansible/$name.sh"
 EOF
     fi
-    cat << EOF >> $DIR/"$name"_vm/Vagrantfile
+    cat << EOF >> $DIR/vagrant_vm/$vagrantfile
   end
 end
 EOF
 }
 
 create_vm() {
-    cd $DIR/"$1"_vm
+    local user=$1
+    local name=$2
+    local vagrantfile="$user"_"$name"_Vagrantfile
+
+    cd $DIR/vagrant_vm
     if [ $destroy -eq 1 ]; then
-        vagrant destroy -f
+        VAGRANT_VAGRANTFILE=$vagrantfile vagrant destroy -f
     else
-        echo "Creating $1 vm..."
-        vagrant up
+        echo "Creating $name vm..."
+        VAGRANT_VAGRANTFILE=$vagrantfile vagrant up
     fi
     cd $DIR
 }
@@ -138,21 +142,22 @@ if [ -z "$user_offset" ]; then
 fi
 
 (vagrant plugin list | grep vbguest >& /dev/null) || vagrant plugin install vagrant-vbguest
+vagrant_dir="$user_id"_vm
 if [ $dev_vm -eq 1 ]; then
     offset=$(($user_offset * 10 + 90))
     playbook="dev.yml"
-    generate_vagrantfile dev 32000 7
-    create_vm dev
+    generate_vagrantfile $user_id dev 32000 7
+    create_vm $user_id dev
 fi
 if [ $all_vm -eq 1 ]; then
     offset=$(($user_offset * 10 + 91))
     playbook="all.yml"
-    generate_vagrantfile all 64000 8
-    create_vm all
+    generate_vagrantfile $user_id all 64000 8
+    create_vm $user_id all
 fi
 if [ $ui_vm -eq 1 ]; then
     offset=$(($user_offset * 10 + 95))
     playbook="ui.yml"
-    generate_vagrantfile ui 4000 2
-    create_vm ui
+    generate_vagrantfile $user_id ui 4000 2
+    create_vm $user_id ui
 fi
