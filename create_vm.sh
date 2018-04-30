@@ -150,6 +150,11 @@ if [ $dev_vm -eq 1 ]; then
     create_vm $user_id dev
 fi
 if [ $all_vm -eq 1 ]; then
+    count=$(vboxmanage list runningvms | grep all | wc -l)
+    if [ $count -gt 3 ]; then
+        echo "Cannot create more VMs, 4 or more VMs are already running."
+        exit 1
+    fi
     offset=$(($user_offset * 10 + 91))
     playbook="all.yml"
     generate_vagrantfile $user_id all 64000 8
