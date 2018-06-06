@@ -88,7 +88,7 @@ create_vm() {
     if [ $destroy -eq 1 ]; then
         VAGRANT_VAGRANTFILE=$vagrantfile vagrant destroy -f
     else
-        echo "Creating $name vm..."
+        echo "Creating $name vm with IP $base_ip.$offset..."
         VAGRANT_VAGRANTFILE=$vagrantfile vagrant up
     fi
     cd $DIR
