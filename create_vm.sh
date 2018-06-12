@@ -10,6 +10,7 @@ print_usage() {
     echo ""
     echo "    VM OPTIONS:"
     echo "       --dev        : Create the Dev VM"
+    echo "       --dev-lite   : Create the Headless Dev VM"
     echo "       --all <tag>  : Create the Contrail all-in-one VM"
     echo "       --ui         : Create the Contrail UI VM"
     echo "       --destroy    : Destroy the VM"
@@ -95,6 +96,7 @@ create_vm() {
 }
 
 dev_vm=0
+dev_lite_vm=0
 all_vm=0
 ui_vm=0
 destroy=0
@@ -102,18 +104,19 @@ destroy=0
 while [ $# -gt 0 ]
 do
     case "$1" in
-        --dev)     dev_vm=1                           ;;
-        --all)     all_vm=1; tag=$2; shift            ;;
-        --ui)      ui_vm=1                            ;;
-        --destroy) destroy=1                       ;;
-        --help)    print_usage 0                      ;;
-        -*)        echo "Error! Unknown option $1";
-                   print_usage                        ;;
-        *)         if [ -z "$user_id" ]; then
-                       user_id="$1"
-                   else
-                       print_usage
-                   fi                                 ;;
+        --dev)      dev_vm=1                           ;;
+        --dev-lite) dev_lite_vm=1                      ;;
+        --all)      all_vm=1; tag=$2; shift            ;;
+        --ui)       ui_vm=1                            ;;
+        --destroy)  destroy=1                          ;;
+        --help)     print_usage 0                      ;;
+        -*)         echo "Error! Unknown option $1";
+                    print_usage                        ;;
+        *)          if [ -z "$user_id" ]; then
+                        user_id="$1"
+                    else
+                        print_usage
+                    fi                                 ;;
     esac
     shift
 done
@@ -121,7 +124,7 @@ done
 if [ -z "$user_id" ]; then
     user_id=$(whoami)
 fi
-if [ $dev_vm -eq 0 -a $all_vm -eq 0 -a $ui_vm -eq 0 ]; then
+if [ $dev_vm -eq 0 -a $dev_lite_vm -eq 0 -a $all_vm -eq 0 -a $ui_vm -eq 0 ]; then
     print_usage
 fi
 if [ $all_vm -eq 1 -a -z "$tag" ]; then
@@ -148,6 +151,12 @@ if [ $dev_vm -eq 1 ]; then
     playbook="dev.yml"
     generate_vagrantfile $user_id dev 32000 7
     create_vm $user_id dev
+fi
+if [ $dev_lite_vm -eq 1 ]; then
+    offset=$(($user_offset * 10 + 90))
+    playbook="dev-lite.yml"
+    generate_vagrantfile $user_id dev-lite 32000 7
+    create_vm $user_id dev-lite
 fi
 if [ $all_vm -eq 1 ]; then
     count=$(vboxmanage list runningvms | grep all | wc -l)
