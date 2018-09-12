@@ -43,11 +43,13 @@ generate_vagrantfile() {
     local name=$2
     local memory=$3
     local cpus=$4
-    local vagrantfile="$user"_"$name"_Vagrantfile
+    local vagrantdir="$user"_"$name"
 
-    cat << EOF > $DIR/vagrant_vm/$vagrantfile
+    mkdir -p $DIR/vagrant_vm/$vagrantdir
+    cat << EOF > $DIR/vagrant_vm/$vagrantdir/Vagrantfile
 Vagrant.configure("2") do |config|
-  config.vm.box = "centos/7"
+  config.vm.box = "rishabhtulsian/CentOS7.5-350GB"
+  config.vbguest.auto_update = false
 
   config.vm.define "$user_id-$name" do |m|
     m.vm.provider "virtualbox" do |v|
@@ -57,8 +59,10 @@ Vagrant.configure("2") do |config|
 
     m.vm.network "public_network", auto_config: false, bridge: '$host_interface'
 
+    m.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/yum-init.sh"
+
     m.vm.provision :ansible do |ansible|
-      ansible.playbook = "ansible/$name.yml"
+      ansible.playbook = "$DIR/vagrant_vm/ansible/$name.yml"
       ansible.extra_vars = {
           vm_interface: "$interface",
           vm_gateway_ip: "$gateway_ip",
@@ -69,12 +73,12 @@ Vagrant.configure("2") do |config|
     end
 EOF
     if [ "$name" == "all" ]; then
-        cat << EOF >> $DIR/vagrant_vm/$vagrantfile
+        cat << EOF >> $DIR/vagrant_vm/$vagrantdir/Vagrantfile
 
-    m.vm.provision "shell", path: "ansible/$name.sh"
+    m.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/$name.sh"
 EOF
     fi
-    cat << EOF >> $DIR/vagrant_vm/$vagrantfile
+    cat << EOF >> $DIR/vagrant_vm/$vagrantdir/Vagrantfile
   end
 end
 EOF
@@ -83,14 +87,14 @@ EOF
 create_vm() {
     local user=$1
     local name=$2
-    local vagrantfile="$user"_"$name"_Vagrantfile
+    local vagrantdir="$user"_"$name"
 
-    cd $DIR/vagrant_vm
+    cd $DIR/vagrant_vm/$vagrantdir
     if [ $destroy -eq 1 ]; then
-        VAGRANT_VAGRANTFILE=$vagrantfile vagrant destroy -f
+        vagrant destroy -f
     else
         echo "Creating $name vm with IP $base_ip.$offset..."
-        VAGRANT_VAGRANTFILE=$vagrantfile vagrant up
+        vagrant up
     fi
     cd $DIR
 }
