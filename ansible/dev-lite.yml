@@ -8,7 +8,6 @@
     - setup_root
     - base_pkgs
     - dev_pkgs
-    - tmux
     - devenv
   vars:
     set_root_pass: 'mpls'

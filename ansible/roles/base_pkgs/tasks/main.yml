@@ -5,11 +5,16 @@
     state: latest
 
 - name: Install ansible
-  yum: 
+  yum:
     name: ansible
     state: latest
 
 - name: Install git
-  yum: 
+  yum:
     name: git
+    state: latest
+
+- name: Install tmux
+  yum:
+    name: tmux
     state: latest

@@ -7,6 +7,5 @@
     - network
     - setup_root
     - base_pkgs
-    - tmux
   vars:
     set_root_pass: 'contrail'
