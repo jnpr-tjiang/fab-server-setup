@@ -20,6 +20,7 @@ instances:
       analytics_database:
       vrouter:
       openstack:
+      openstack_compute:
 {% for secondary in secondaries %}
   {{ secondary.host }}:
     ip: {{ secondary.ip }}
