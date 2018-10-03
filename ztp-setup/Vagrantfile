@@ -1,0 +1,59 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+vagrant_root = File.dirname(__FILE__)
+
+Vagrant.configure("2") do |config|
+  config.vm.box = 'centos/7'
+  config.vbguest.auto_update = false
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+
+  config.vm.define 'aio' do |all|
+    all.vm.hostname = 'aio'
+    all.vm.provider "virtualbox" do |v|
+      v.memory = 49152
+      v.cpus = 12
+    end
+    all.vm.network "public_network", auto_config: false, bridge: 'ens2f0'
+    all.vm.provision :ansible do |ansible|
+      ansible.playbook = "ansible/network.yml"
+      ansible.extra_vars = {
+        vm_interface: "eth1",
+        vm_ip: "192.168.10.10",
+        vm_netmask: "255.255.255.0"
+      }
+    end
+    all.vm.provision :ansible do |ansible|
+      ansible.playbook = "ansible/all.yml"
+      ansible.extra_vars = {
+        vm_ip: "192.168.10.10",
+        ntp_server: "66.129.255.62",
+        contrail_version: "5.0-272",
+        vagrant_root: vagrant_root
+      }
+    end
+    all.vm.provision "shell", path: "scripts/all.sh"
+  end
+
+  config.vm.define 'cc' do |cc|
+    cc.vm.hostname = 'cc'
+    cc.vm.network "forwarded_port", guest: 9091, host: 9091
+    cc.vm.provider "virtualbox" do |v|
+      v.memory = 8192
+      v.cpus = 2
+    end
+    cc.vm.provision "shell", inline: "> /etc/profile.d/myvars.sh"
+    cc.vm.provision "shell", inline: "echo 'export CCD_IMAGE=ci-repo.englab.juniper.net:5010/contrail-command-deployer:5.0-272' >> /etc/profile.d/myvars.sh"
+    cc.vm.provision "shell", inline: "echo 'export COMMAND_SERVERS_FILE=/tmp/command_servers.yml' >> /etc/profile.d/myvars.sh"
+    cc.vm.provision "shell", inline: "echo 'export INSTANCES_FILE=/tmp/instances.yml' >> /etc/profile.d/myvars.sh"
+
+    cc.vm.provision "file", source: "config/command_servers.yml", destination: "/tmp/command_servers.yml"
+    cc.vm.provision "file", source: "config/instances.yml", destination: "/tmp/instances.yml"
+
+    cc.vm.provision "shell", path: "scripts/docker.sh"
+    cc.vm.provision :ansible do |ansible|
+      ansible.playbook = "ansible/ui.yml"
+    end
+    cc.vm.provision "shell", path: "scripts/cc.sh"
+  end
+end
