@@ -137,8 +137,8 @@ fi
 
 set -e
 interface="eth1"
-host_interface="eno1"
-ntp_server=172.21.200.60
+host_interface="em1"
+ntp_server="ntp.juniper.net"
 gateway_ip=$(ip route | grep default | grep $host_interface | awk '{print $3}')
 base_ip=$(ip address | grep inet | grep $host_interface | awk '{print $2}' | awk -F '/' '{print $1}' | cut -d"." -f1-3)
 

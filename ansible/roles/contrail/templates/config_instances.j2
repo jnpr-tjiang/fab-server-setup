@@ -1,29 +1,32 @@
+global_configuration:
+  CONTAINER_REGISTRY: ci-repo.englab.juniper.net:5000
+  REGISTRY_PRIVATE_INSECURE: True
 provider_config:
   bms:
-    ssh_pwd: c0ntrail123
     ssh_user: root
+    ssh_pwd: c0ntrail123
     ntpserver: {{ ntp_server }}
     domainsuffix: local
 instances:
   bms1:
-    provider: bms
     ip: {{ vm_ip }}
+    provider: bms
     roles:
-      config_database:
       config:
+      config_database:
       control:
-      analytics_database:
-      analytics:
       webui:
+      analytics:
+      analytics_database:
       vrouter:
       openstack:
       openstack_compute:
-global_configuration:
-  CONTAINER_REGISTRY: ci-repo.englab.juniper.net:5000
-  REGISTRY_PRIVATE_INSECURE: True
 contrail_configuration:
   CONTRAIL_VERSION: {{ contrail_version }}
+  CLOUD_ORCHESTRATOR: openstack
   RABBITMQ_NODE_PORT: 5673
+  ENCAP_PRIORITY: VXLAN,MPLSoUDP,MPLSoGRE
+  OPENSTACK_VERSION: ocata
   AUTH_MODE: keystone
   KEYSTONE_AUTH_URL_VERSION: /v3
 kolla_config:
