@@ -28,13 +28,15 @@ instances:
     roles:
       config:
       config_database:
+      analytics:
+      analytics_database:
 {% endfor %}
 contrail_configuration:
   CONTRAIL_VERSION: {{ contrail_version }}
   CLOUD_ORCHESTRATOR: openstack
   RABBITMQ_NODE_PORT: 5673
   ENCAP_PRIORITY: VXLAN,MPLSoUDP,MPLSoGRE
-  OPENSTACK_VERSION: queens
+  OPENSTACK_VERSION: ocata
   AUTH_MODE: keystone
   KEYSTONE_AUTH_URL_VERSION: /v3
 kolla_config:

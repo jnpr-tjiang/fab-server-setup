@@ -5,14 +5,13 @@ provider_config:
   bms:
     ssh_user: root
     ssh_pwd: c0ntrail123
-    ntpserver: 66.129.255.62
+    ntpserver: ntp.juniper.net
     domainsuffix: local
 instances:
-  aio:
-    ip: 192.168.10.10
+  ha-node1:
+    ip: 10.155.75.131
     provider: bms
     roles:
-      dhcp:
       config:
       config_database:
       control:
@@ -20,21 +19,32 @@ instances:
       analytics:
       analytics_database:
       vrouter:
-      openstack_control:
-      openstack_network:
-      openstack_storage:
-      openstack_monitoring:
+      openstack:
       openstack_compute:
+  ha-node2:
+    ip: 10.155.75.132
+    provider: bms
+    roles:
+      config:
+      config_database:
+      analytics:
+      analytics_database:
+  ha-node3:
+    ip: 10.155.75.133
+    provider: bms
+    roles:
+      config:
+      config_database:
+      analytics:
+      analytics_database:
 contrail_configuration:
-  CONTRAIL_VERSION: 5.0-272
+  CONTRAIL_VERSION: 5.0-302
   CLOUD_ORCHESTRATOR: openstack
   RABBITMQ_NODE_PORT: 5673
   ENCAP_PRIORITY: VXLAN,MPLSoUDP,MPLSoGRE
-  OPENSTACK_VERSION: queens
+  OPENSTACK_VERSION: ocata
   AUTH_MODE: keystone
   KEYSTONE_AUTH_URL_VERSION: /v3
-  GENERATE_SSH: True
-  USE_OPENSTACK_TFTP: True
 kolla_config:
   kolla_globals:
     enable_haproxy: no

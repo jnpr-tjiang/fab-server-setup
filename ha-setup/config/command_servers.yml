@@ -6,7 +6,7 @@ command_servers:
         ssh_user: root
         ssh_pass: c0ntrail123
         sudo_pass: c0ntrail123
-        ntpserver: 66.129.255.62
+        ntpserver: ntp.juniper.net
 
         # Specify either container_path
         #container_path: /root/contrail-command-051618.tar
@@ -14,7 +14,7 @@ command_servers:
         registry_insecure: true
         container_registry: ci-repo.englab.juniper.net:5010
         container_name: contrail-command
-        container_tag: 5.0-278
+        container_tag: 5.0-302
         #container_registry_username: username@juniper.net
         #container_registry_password: passwordforregistry
         config_dir: /etc/contrail
