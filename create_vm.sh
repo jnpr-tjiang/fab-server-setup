@@ -44,8 +44,10 @@ generate_vagrantfile() {
     local cpus=$4
     local vagrantdir="$user"_"$name"
 
-    mkdir -p $DIR/vagrant_vm/$vagrantdir
+    mkdir -p $DIR/vagrant_vm/$vagrantdir/config
     cat << EOF > $DIR/vagrant_vm/$vagrantdir/Vagrantfile
+vagrant_root = File.dirname(__FILE__)
+
 Vagrant.configure("2") do |config|
   config.vm.box = "rishabhtulsian/CentOS7.5-350GB"
   config.vbguest.auto_update = false
@@ -68,14 +70,15 @@ Vagrant.configure("2") do |config|
           vm_gateway_ip: "$gateway_ip",
           vm_ip: "$base_ip.$offset",
           ntp_server: "$ntp_server",
-          contrail_version: "$tag"
+          contrail_version: "$tag",
+          vagrant_root: vagrant_root
       }
     end
 EOF
     if [ "$name" == "all" ]; then
         cat << EOF >> $DIR/vagrant_vm/$vagrantdir/Vagrantfile
 
-    m.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/$name.sh"
+    m.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/scripts/$name.sh"
 EOF
     fi
     cat << EOF >> $DIR/vagrant_vm/$vagrantdir/Vagrantfile
@@ -102,7 +105,8 @@ EOF
           vm_gateway_ip: "$gateway_ip",
           vm_ip: "$ui_ip",
           ntp_server: "$ntp_server",
-          contrail_version: "$ui_tag"
+          contrail_version: "$ui_tag",
+          vagrant_root: vagrant_root
       }
     end
     cc.vm.provision "shell", inline: "> /etc/profile.d/myvars.sh"
@@ -113,14 +117,16 @@ EOF
     cc.vm.provision "file", source: "config/command_servers.yml", destination: "/tmp/command_servers.yml"
     cc.vm.provision "file", source: "config/instances.yml", destination: "/tmp/instances.yml"
 
-    cc.vm.provision "shell", path: "scripts/docker.sh"
+    cc.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/scripts/docker.sh"
     cc.vm.provision :ansible do |ansible|
       ansible.playbook = "ansible/setup.yml"
     end
-    cc.vm.provision "file", source: "scripts/cc.sh", destination: "/tmp/cc.sh"
+    cc.vm.provision "file", source: "$DIR/vagrant_vm/ansible/scripts/cc.sh", destination: "/tmp/cc.sh"
     cc.vm.provision "shell", inline: "chmod +x /tmp/cc.sh"
     cc.vm.provision "shell", inline: "/tmp/cc.sh"
+  end
 EOF
+    fi
     cat << EOF >> $DIR/vagrant_vm/$vagrantdir/Vagrantfile
 end
 EOF
