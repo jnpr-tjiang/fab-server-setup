@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 echo "Configure contrail deployment"
 cd /root/contrail-ansible-deployer
 ansible-playbook -i inventory/ -e orchestrator=openstack playbooks/configure_instances.yml

@@ -9,11 +9,10 @@ print_usage() {
     echo "Usage: create_vm.sh [user-id] [VM OPTIONS]"
     echo ""
     echo "    VM OPTIONS:"
-    echo "       --dev        : Create the Dev VM"
-    echo "       --dev-lite   : Create the Headless Dev VM"
-    echo "       --all <tag>  : Create the Contrail all-in-one VM"
-    echo "       --ui         : Create the Contrail UI VM"
-    echo "       --destroy    : Destroy the VM"
+    echo "       --dev                                  : Create the Dev VM"
+    echo "       --dev-lite                             : Create the Headless Dev VM"
+    echo "       --all <contrail-version> <ui-version>  : Create the Contrail all-in-one VM"
+    echo "       --destroy                              : Destroy the VM"
     echo ""
     echo "Note: Each developer is assigned with an ip range. The dev VM is created with the"
     echo "first ip in that range. For example, if your assgined range is 10.155.75.100-109, then"
@@ -52,6 +51,7 @@ Vagrant.configure("2") do |config|
   config.vbguest.auto_update = false
 
   config.vm.define "$user_id-$name" do |m|
+    m.vm.hostname = "$user_id-$name"
     m.vm.provider "virtualbox" do |v|
       v.memory = $memory
       v.cpus = $cpus
@@ -80,6 +80,48 @@ EOF
     fi
     cat << EOF >> $DIR/vagrant_vm/$vagrantdir/Vagrantfile
   end
+EOF
+    if [ "$name" == "all" ]; then
+        cat << EOF >> $DIR/vagrant_vm/$vagrantdir/Vagrantfile
+
+  config.vm.define "$user_id-ui" do |cc|
+    cc.vm.hostname = "$user_id-ui"
+    cc.vm.provider "virtualbox" do |v|
+      v.memory = 4000
+      v.cpus = 2
+    end
+
+    cc.vm.network "public_network", auto_config: false, bridge: '$host_interface'
+
+    cc.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/yum-init.sh"
+
+    cc.vm.provision :ansible do |ansible|
+      ansible.playbook = "$DIR/vagrant_vm/ansible/ui.yml"
+      ansible.extra_vars = {
+          vm_interface: "$interface",
+          vm_gateway_ip: "$gateway_ip",
+          vm_ip: "$ui_ip",
+          ntp_server: "$ntp_server",
+          contrail_version: "$ui_tag"
+      }
+    end
+    cc.vm.provision "shell", inline: "> /etc/profile.d/myvars.sh"
+    cc.vm.provision "shell", inline: "echo 'export CCD_IMAGE=ci-repo.englab.juniper.net:5010/contrail-command-deployer:$ui_tag' >> /etc/profile.d/myvars.sh"
+    cc.vm.provision "shell", inline: "echo 'export COMMAND_SERVERS_FILE=/tmp/command_servers.yml' >> /etc/profile.d/myvars.sh"
+    cc.vm.provision "shell", inline: "echo 'export INSTANCES_FILE=/tmp/instances.yml' >> /etc/profile.d/myvars.sh"
+
+    cc.vm.provision "file", source: "config/command_servers.yml", destination: "/tmp/command_servers.yml"
+    cc.vm.provision "file", source: "config/instances.yml", destination: "/tmp/instances.yml"
+
+    cc.vm.provision "shell", path: "scripts/docker.sh"
+    cc.vm.provision :ansible do |ansible|
+      ansible.playbook = "ansible/setup.yml"
+    end
+    cc.vm.provision "file", source: "scripts/cc.sh", destination: "/tmp/cc.sh"
+    cc.vm.provision "shell", inline: "chmod +x /tmp/cc.sh"
+    cc.vm.provision "shell", inline: "/tmp/cc.sh"
+EOF
+    cat << EOF >> $DIR/vagrant_vm/$vagrantdir/Vagrantfile
 end
 EOF
 }
@@ -93,7 +135,10 @@ create_vm() {
     if [ $destroy -eq 1 ]; then
         vagrant destroy -f
     else
-        echo "Creating $name vm with IP $base_ip.$offset..."
+        echo "Creating ${user}_${name} vm with IP $base_ip.$offset..."
+        if [ "$name" == "all" ]; then
+            echo "Creating ${user}_ui vm with IP $ui_ip..."
+        fi
         vagrant up
     fi
     cd $DIR
@@ -102,25 +147,23 @@ create_vm() {
 dev_vm=0
 dev_lite_vm=0
 all_vm=0
-ui_vm=0
 destroy=0
 
 while [ $# -gt 0 ]
 do
     case "$1" in
-        --dev)      dev_vm=1                           ;;
-        --dev-lite) dev_lite_vm=1                      ;;
-        --all)      all_vm=1; tag=$2; shift            ;;
-        --ui)       ui_vm=1                            ;;
-        --destroy)  destroy=1                          ;;
-        --help)     print_usage 0                      ;;
+        --dev)      dev_vm=1                                  ;;
+        --dev-lite) dev_lite_vm=1                             ;;
+        --all)      all_vm=1; tag=$2; ui_tag=$3; shift; shift ;;
+        --destroy)  destroy=1                                 ;;
+        --help)     print_usage 0                             ;;
         -*)         echo "Error! Unknown option $1";
-                    print_usage                        ;;
+                    print_usage                               ;;
         *)          if [ -z "$user_id" ]; then
                         user_id="$1"
                     else
                         print_usage
-                    fi                                 ;;
+                    fi                                        ;;
     esac
     shift
 done
@@ -128,7 +171,7 @@ done
 if [ -z "$user_id" ]; then
     user_id=$(whoami)
 fi
-if [ $dev_vm -eq 0 -a $dev_lite_vm -eq 0 -a $all_vm -eq 0 -a $ui_vm -eq 0 ]; then
+if [ $dev_vm -eq 0 -a $dev_lite_vm -eq 0 -a $all_vm -eq 0 ]; then
     print_usage
 fi
 if [ $all_vm -eq 1 -a -z "$tag" ]; then
@@ -169,13 +212,10 @@ if [ $all_vm -eq 1 ]; then
         exit 1
     fi
     offset=$(($user_offset * 10 + 91))
+    all_ip="$base_ip.$offset"
+    ui_offset=$(($user_offset * 10 + 95))
+    ui_ip="$base_ip.$ui_offset"
     playbook="all.yml"
     generate_vagrantfile $user_id all 64000 8
     create_vm $user_id all
-fi
-if [ $ui_vm -eq 1 ]; then
-    offset=$(($user_offset * 10 + 95))
-    playbook="ui.yml"
-    generate_vagrantfile $user_id ui 4000 2
-    create_vm $user_id ui
 fi
