@@ -7,6 +7,5 @@
     - network
     - setup_root
     - base_pkgs
-    - command
   vars:
     set_root_pass: 'contrail'

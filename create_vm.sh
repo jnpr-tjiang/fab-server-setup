@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 EOF=EOF
 DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -118,9 +118,6 @@ EOF
     cc.vm.provision "file", source: "config/instances.yml", destination: "/tmp/instances.yml"
 
     cc.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/scripts/docker.sh"
-    cc.vm.provision :ansible do |ansible|
-      ansible.playbook = "ansible/setup.yml"
-    end
     cc.vm.provision "file", source: "$DIR/vagrant_vm/ansible/scripts/cc.sh", destination: "/tmp/cc.sh"
     cc.vm.provision "shell", inline: "chmod +x /tmp/cc.sh"
     cc.vm.provision "shell", inline: "/tmp/cc.sh"
@@ -130,6 +127,10 @@ EOF
     cat << EOF >> $DIR/vagrant_vm/$vagrantdir/Vagrantfile
 end
 EOF
+
+    if [ "$name" == "all" ]; then
+        ansible-playbook ansible/command.yml --extra-vars "vm_ip=$ui_ip ntp_server=$ntp_server contrail_version=$ui_tag vagrant_root=$DIR/vagrant_vm/$vagrantdir"
+    fi
 }
 
 create_vm() {
