@@ -9,10 +9,10 @@ print_usage() {
     echo "Usage: create_vm.sh [user-id] [VM OPTIONS]"
     echo ""
     echo "    VM OPTIONS:"
-    echo "       --dev                                  : Create the Dev VM"
-    echo "       --dev-lite                             : Create the Headless Dev VM"
-    echo "       --all <contrail-version> <ui-version>  : Create the Contrail all-in-one VM"
-    echo "       --destroy                              : Destroy the VM"
+    echo "       --dev           : Create the Dev VM"
+    echo "       --dev-lite      : Create the Headless Dev VM"
+    echo "       --all <version> : Create the Contrail all-in-one and UI VM"
+    echo "       --destroy       : Destroy the VM"
     echo ""
     echo "Note: Each developer is assigned with an ip range. The dev VM is created with the"
     echo "first ip in that range. For example, if your assgined range is 10.155.75.100-109, then"
@@ -160,18 +160,18 @@ destroy=0
 while [ $# -gt 0 ]
 do
     case "$1" in
-        --dev)      dev_vm=1                                  ;;
-        --dev-lite) dev_lite_vm=1                             ;;
-        --all)      all_vm=1; tag=$2; ui_tag=$3; shift; shift ;;
-        --destroy)  destroy=1                                 ;;
-        --help)     print_usage 0                             ;;
+        --dev)      dev_vm=1                           ;;
+        --dev-lite) dev_lite_vm=1                      ;;
+        --all)      all_vm=1; tag=$2; ui_tag=$2; shift ;;
+        --destroy)  destroy=1                          ;;
+        --help)     print_usage 0                      ;;
         -*)         echo "Error! Unknown option $1";
-                    print_usage                               ;;
+                    print_usage                        ;;
         *)          if [ -z "$user_id" ]; then
                         user_id="$1"
                     else
                         print_usage
-                    fi                                        ;;
+                    fi                                 ;;
     esac
     shift
 done

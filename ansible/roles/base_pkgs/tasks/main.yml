@@ -18,3 +18,9 @@
   yum:
     name: tmux
     state: latest
+
+- name: Disable firewall
+  service:
+    name: firewalld
+    enabled: no
+    state: stopped
