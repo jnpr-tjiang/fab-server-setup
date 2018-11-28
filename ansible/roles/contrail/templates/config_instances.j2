@@ -19,14 +19,17 @@ instances:
       analytics:
       analytics_database:
       vrouter:
-      openstack:
+      openstack_control:
+      openstack_network:
+      openstack_storage:
+      openstack_monitoring:
       openstack_compute:
 contrail_configuration:
   CONTRAIL_VERSION: {{ contrail_version }}
   CLOUD_ORCHESTRATOR: openstack
   RABBITMQ_NODE_PORT: 5673
   ENCAP_PRIORITY: VXLAN,MPLSoUDP,MPLSoGRE
-  OPENSTACK_VERSION: ocata
+  OPENSTACK_VERSION: queens
   AUTH_MODE: keystone
   KEYSTONE_AUTH_URL_VERSION: /v3
 kolla_config:

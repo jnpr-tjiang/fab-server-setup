@@ -49,7 +49,8 @@ generate_vagrantfile() {
 vagrant_root = File.dirname(__FILE__)
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "rishabhtulsian/CentOS7.5-350GB"
+  # config.vm.box = "rishabhtulsian/CentOS7.5-350GB"
+  config.vm.box = "centos/7"
   config.vbguest.auto_update = false
 
   config.vm.define "$user_id-$name" do |m|
@@ -61,7 +62,7 @@ Vagrant.configure("2") do |config|
 
     m.vm.network "public_network", auto_config: false, bridge: '$host_interface'
 
-    m.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/yum-init.sh"
+    # m.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/yum-init.sh"
 
     m.vm.provision :ansible do |ansible|
       ansible.playbook = "$DIR/vagrant_vm/ansible/$name.yml"
@@ -96,7 +97,7 @@ EOF
 
     cc.vm.network "public_network", auto_config: false, bridge: '$host_interface'
 
-    cc.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/yum-init.sh"
+    # cc.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/yum-init.sh"
 
     cc.vm.network "forwarded_port", guest: 9091, host: 9091
     cc.vm.provision :ansible do |ansible|
