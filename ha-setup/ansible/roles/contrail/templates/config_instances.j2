@@ -39,6 +39,8 @@ contrail_configuration:
   OPENSTACK_VERSION: ocata
   AUTH_MODE: keystone
   KEYSTONE_AUTH_URL_VERSION: /v3
+  DATABASE_NODEMGR__DEFAULTS__minimum_diskGB: 2
+  CONFIG_DATABASE_NODEMGR__DEFAULTS__minimum_diskGB: 2
 kolla_config:
   kolla_globals:
     enable_haproxy: no
