@@ -35,6 +35,8 @@ contrail_configuration:
   KEYSTONE_AUTH_URL_VERSION: /v3
   GENERATE_SSH: True
   USE_OPENSTACK_TFTP: True
+  DATABASE_NODEMGR__DEFAULTS__minimum_diskGB: 2
+  CONFIG_DATABASE_NODEMGR__DEFAULTS__minimum_diskGB: 2
 kolla_config:
   kolla_globals:
     enable_haproxy: no
