@@ -49,8 +49,7 @@ generate_vagrantfile() {
 vagrant_root = File.dirname(__FILE__)
 
 Vagrant.configure("2") do |config|
-  # config.vm.box = "rishabhtulsian/CentOS7.5-350GB"
-  config.vm.box = "centos/7"
+  config.vm.box = "qarham/CentOS7.5-350GB"
   config.vbguest.auto_update = false
 
   config.vm.define "$user_id-$name" do |m|
