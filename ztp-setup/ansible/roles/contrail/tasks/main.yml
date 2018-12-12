@@ -3,8 +3,6 @@
   git:
     repo: 'https://github.com/Juniper/contrail-ansible-deployer.git'
     dest: /root/contrail-ansible-deployer
-    update: no
-    version: R5.0
 
 - name: Populate contrail-ansible-deployer/config/instances.yaml
   template:
