@@ -1,4 +1,9 @@
 ---
+- name: Install python-requests
+  yum:
+    name: python-requests
+    state: latest
+
 - name: Clone contrail-ansible-deployer
   git:
     repo: 'https://github.com/Juniper/contrail-ansible-deployer.git'
