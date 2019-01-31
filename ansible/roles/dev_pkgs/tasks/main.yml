@@ -29,11 +29,6 @@
     name: vim
     state: latest
 
-- name: Upgrade pip
-  pip:
-    name: pip
-    state: latest
-
 - name: Install git review
   pip:
     name: git-review

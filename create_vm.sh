@@ -215,8 +215,8 @@ if [ $dev_lite_vm -eq 1 ]; then
 fi
 if [ $all_vm -eq 1 ]; then
     count=$(vboxmanage list runningvms | grep all | wc -l)
-    if [ $count -gt 2 -a $destroy -ne 1 ]; then
-        echo "Cannot create more VMs, 3 or more VMs are already running."
+    if [ $count -gt 5 -a $destroy -ne 1 ]; then
+        echo "Cannot create more VMs, 3 or more aio+ui VMs are already running."
         exit 1
     fi
     offset=$(($user_offset * 10 + 91))
