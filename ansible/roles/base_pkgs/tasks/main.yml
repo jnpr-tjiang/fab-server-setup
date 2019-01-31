@@ -4,6 +4,16 @@
     name: epel-release
     state: latest
 
+- name: Install pip
+  yum:
+    name: python-pip
+    state: latest
+
+- name: Install python-setuptools
+  yum:
+    name: python-setuptools
+    state: latest
+
 - name: Install ansible
   yum:
     name: ansible
