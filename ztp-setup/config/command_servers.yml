@@ -6,7 +6,7 @@ command_servers:
         ssh_user: root
         ssh_pass: c0ntrail123
         sudo_pass: c0ntrail123
-        ntpserver: 66.129.255.62
+        ntpserver: ntp.juniper.net
 
         # Specify either container_path
         #container_path: /root/contrail-command-051618.tar

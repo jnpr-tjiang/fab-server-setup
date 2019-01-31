@@ -4,5 +4,5 @@ yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce
 yum install -y docker-ce
 systemctl enable docker
 systemctl start docker
-echo '{"insecure-registries": ["ci-repo.englab.juniper.net:5010"]}' >> /etc/docker/daemon.json
+echo '{"insecure-registries": ["ci-repo.englab.juniper.net:5000", "ci-repo.englab.juniper.net:5010"]}' >> /etc/docker/daemon.json
 systemctl restart docker

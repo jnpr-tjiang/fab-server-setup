@@ -1,11 +1,11 @@
 global_configuration:
-  CONTAINER_REGISTRY: ci-repo.englab.juniper.net:5010
+  CONTAINER_REGISTRY: ci-repo.englab.juniper.net:5000
   REGISTRY_PRIVATE_INSECURE: True
 provider_config:
   bms:
     ssh_user: root
     ssh_pwd: c0ntrail123
-    ntpserver: 66.129.255.62
+    ntpserver: ntp.juniper.net
     domainsuffix: local
 instances:
   aio:
