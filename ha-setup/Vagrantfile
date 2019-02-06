@@ -57,10 +57,10 @@ Vagrant.configure("2") do |config|
     cc.vm.provision "shell", inline: "> /etc/profile.d/myvars.sh"
     cc.vm.provision "shell", inline: "echo 'export CCD_IMAGE=ci-repo.englab.juniper.net:5010/contrail-command-deployer:5.0-302' >> /etc/profile.d/myvars.sh"
     cc.vm.provision "shell", inline: "echo 'export COMMAND_SERVERS_FILE=/tmp/command_servers.yml' >> /etc/profile.d/myvars.sh"
-    cc.vm.provision "shell", inline: "echo 'export INSTANCES_FILE=/tmp/instances.yml' >> /etc/profile.d/myvars.sh"
+    cc.vm.provision "shell", inline: "echo 'export INSTANCES_FILE=/tmp/instances.yaml' >> /etc/profile.d/myvars.sh"
 
     cc.vm.provision "file", source: "config/command_servers.yml", destination: "/tmp/command_servers.yml"
-    cc.vm.provision "file", source: "config/instances.yml", destination: "/tmp/instances.yml"
+    cc.vm.provision "file", source: "config/instances.yaml", destination: "/tmp/instances.yaml"
 
     cc.vm.provision "shell", path: "scripts/docker.sh"
     cc.vm.provision :ansible do |ansible|

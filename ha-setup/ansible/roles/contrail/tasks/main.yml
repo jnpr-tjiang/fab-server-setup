@@ -17,5 +17,5 @@
 - name: Populate config/instances.yaml
   template:
     src: config_instances.j2
-    dest: "{{ vagrant_root }}/config/instances.yml"
+    dest: "{{ vagrant_root }}/config/instances.yaml"
   delegate_to: localhost

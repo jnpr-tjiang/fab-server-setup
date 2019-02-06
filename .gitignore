@@ -1,4 +1,6 @@
 *_Vagrantfile
 .vagrant/
+vagrant_vm/
+config/
 
 *.retry
