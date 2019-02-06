@@ -10,3 +10,4 @@
     - contrail
   vars:
     set_root_pass: 'contrail'
+    instances_template: 'config_instances.j2'

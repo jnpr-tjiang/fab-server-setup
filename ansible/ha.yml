@@ -4,6 +4,10 @@
   gather_facts: no
   become: True
   roles:
+    - network
     - setup_root
+    - base_pkgs
+    - contrail
   vars:
     set_root_pass: 'contrail'
+    instances_template: 'config_ha_instances.j2'

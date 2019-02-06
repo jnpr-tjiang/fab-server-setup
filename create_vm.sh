@@ -224,6 +224,6 @@ if [ $all_vm -eq 1 ]; then
     ui_offset=$(($user_offset * 10 + 95))
     ui_ip="$base_ip.$ui_offset"
     playbook="all.yml"
-    generate_vagrantfile $user_id all 64000 8
+    generate_vagrantfile $user_id all 48000 8
     create_vm $user_id all
 fi
