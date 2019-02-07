@@ -61,8 +61,6 @@ Vagrant.configure("2") do |config|
 
     m.vm.network "public_network", auto_config: false, bridge: '$host_interface'
 
-    # m.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/yum-init.sh"
-
     m.vm.provision :ansible do |ansible|
       ansible.playbook = "$DIR/vagrant_vm/ansible/$name.yml"
       ansible.extra_vars = {
@@ -99,8 +97,6 @@ EOF
     end
 
     cc.vm.network "public_network", auto_config: false, bridge: '$host_interface'
-
-    # cc.vm.provision "shell", path: "$DIR/vagrant_vm/ansible/yum-init.sh"
 
     cc.vm.network "forwarded_port", guest: 9091, host: 9091
     cc.vm.provision :ansible do |ansible|

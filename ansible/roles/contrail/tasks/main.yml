@@ -8,11 +8,18 @@
   git:
     repo: 'https://github.com/Juniper/contrail-ansible-deployer.git'
     dest: /root/contrail-ansible-deployer
+    force: yes
 
 - name: Populate contrail-ansible-deployer/config/instances.yaml
   template:
     src: "{{ instances_template }}"
     dest: /root/contrail-ansible-deployer/config/instances.yaml
+
+- name: Create config directory
+  file:
+    path: "{{ vagrant_root }}/config"
+    state: directory
+  delegate_to: localhost
 
 - name: Populate config/instances.yaml
   template:

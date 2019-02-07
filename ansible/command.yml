@@ -1,6 +1,6 @@
 ---
 - name: Generate command_servers.yml
-  hosts: localhost
+  hosts: all
   gather_facts: no
   roles:
     - command
