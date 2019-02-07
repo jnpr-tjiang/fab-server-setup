@@ -17,17 +17,11 @@ Vagrant.configure("2") do |config|
     end
     all.vm.network "public_network", auto_config: false, bridge: 'ens2f0'
     all.vm.provision :ansible do |ansible|
-      ansible.playbook = "ansible/network.yml"
+      ansible.playbook = "ansible/all.yml"
       ansible.extra_vars = {
         vm_interface: "eth1",
         vm_ip: "192.168.10.10",
-        vm_netmask: "255.255.255.0"
-      }
-    end
-    all.vm.provision :ansible do |ansible|
-      ansible.playbook = "ansible/all.yml"
-      ansible.extra_vars = {
-        vm_ip: "192.168.10.10",
+        vm_netmask: "255.255.255.0",
         ntp_server: "ntp.juniper.net",
         contrail_version: contrail_version,
         vagrant_root: vagrant_root

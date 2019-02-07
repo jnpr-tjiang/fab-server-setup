@@ -69,6 +69,10 @@ Vagrant.configure("2") do |config|
           vm_interface: "$interface",
           vm_gateway_ip: "$gateway_ip",
           vm_ip: "$base_ip.$offset",
+          vm_netmask: "255.255.224.0",
+          vm_dns1: "172.21.200.60",
+          vm_dns2: "8.8.8.8",
+          vm_domain: "englab.juniper.net jnpr.net juniper.net",
           ntp_server: "$ntp_server",
           contrail_version: "$tag",
           vagrant_root: vagrant_root
@@ -105,6 +109,10 @@ EOF
           vm_interface: "$interface",
           vm_gateway_ip: "$gateway_ip",
           vm_ip: "$ui_ip",
+          vm_netmask: "255.255.224.0",
+          vm_dns1: "172.21.200.60",
+          vm_dns2: "8.8.8.8",
+          vm_domain: "englab.juniper.net jnpr.net juniper.net",
           ntp_server: "$ntp_server",
           contrail_version: "$ui_tag",
           vagrant_root: vagrant_root
