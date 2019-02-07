@@ -11,11 +11,11 @@
 
 - name: Populate contrail-ansible-deployer/config/instances.yaml
   template:
-    src: {{ instances_template }}
+    src: "{{ instances_template }}"
     dest: /root/contrail-ansible-deployer/config/instances.yaml
 
 - name: Populate config/instances.yaml
   template:
-    src: {{ instances_template }}
+    src: "{{ instances_template }}"
     dest: "{{ vagrant_root }}/config/instances.yaml"
   delegate_to: localhost
