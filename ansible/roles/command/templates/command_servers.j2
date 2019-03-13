@@ -19,22 +19,20 @@ command_servers:
         #container_registry_password: passwordforregistry
         config_dir: /etc/contrail
 
+        # User defined volumes
+        #user_command_volumes:
+        #  - /var/tmp/contrail:/var/tmp/contrail
+
         # contrail command container configurations given here go to /etc/contrail/contrail.yml
         contrail_config:
             # Database configuration. MySQL/PostgreSQL supported
             database:
-                # MySQL example
-                type: mysql
-                dialect: mysql
+                type: postgres
+                dialect: postgres
                 host: localhost
                 user: root
                 password: contrail123
                 name: contrail_test
-                # Postgres example
-                #connection: "user=root dbname=contrail_test sslmode=disable"
-                #type: postgres
-                #dialect: postgres
-
                 # Max Open Connections for DB Server
                 max_open_conn: 100
                 connection_retries: 10
@@ -42,6 +40,14 @@ command_servers:
 
             # Log Level
             log_level: debug
+
+            # Cache configuration
+            cache:
+              enabled: true
+              timeout: 10s
+              max_history: 100000
+              rdbms:
+                enabled: true
 
             # Server configuration
             server:
@@ -75,6 +81,9 @@ command_servers:
 
               notify_etcd: false
 
+              # VNC Replication
+              enable_vnc_replication: true
+
             # Keystone configuration
             keystone:
                 local: true
@@ -103,7 +112,7 @@ command_servers:
                           email: admin@juniper.nets
                           roles:
                           - id: admin
-                            name: Admin
+                            name: admin
                             project: *admin
                         bob:
                           id: bob
@@ -170,7 +179,7 @@ command_servers:
 
          # The following are optional parameters used to patch/cherrypick
          # revisions into the contrail-ansible-deployer sandbox. These configs
-         # go into the /etc/contrail/contrail-cluster.tmpl file
+         # go into the /etc/contrail/contrail-deploy-config.tmpl file
 #        cluster_config:
 #            ansible_fetch_url: "https://review.opencontrail.org/Juniper/contrail-ansible-deployer refs/changes/80/40780/20"
 #            ansible_cherry_pick_revision: FETCH_HEAD

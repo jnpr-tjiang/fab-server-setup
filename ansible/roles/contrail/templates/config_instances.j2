@@ -18,6 +18,8 @@ instances:
       webui:
       analytics:
       analytics_database:
+      analytics_alarm:
+      analytics_snmp:
       vrouter:
       openstack_control:
       openstack_network:
@@ -31,6 +33,7 @@ contrail_configuration:
   ENCAP_PRIORITY: VXLAN,MPLSoUDP,MPLSoGRE
   OPENSTACK_VERSION: queens
   AUTH_MODE: keystone
+  KEYSTONE_AUTH_HOST: {{ vm_ip }}
   KEYSTONE_AUTH_URL_VERSION: /v3
   LOG_LEVEL: SYS_DEBUG
 kolla_config:
