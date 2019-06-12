@@ -47,6 +47,7 @@ generate_vagrantfile() {
     mkdir -p $DIR/vagrant_vm/$vagrantdir/config
     cat << EOF > $DIR/vagrant_vm/$vagrantdir/Vagrantfile
 vagrant_root = File.dirname(__FILE__)
+eth0_file = "/etc/sysconfig/network-scripts/ifcfg-eth0"
 
 Vagrant.configure("2") do |config|
   config.vm.box = "qarham/CentOS7.5-350GB"
@@ -98,7 +99,7 @@ EOF
 
     cc.vm.network "public_network", auto_config: false, bridge: '$host_interface'
 
-    cc.vm.network "forwarded_port", guest: 9091, host: 9091
+    cc.vm.provision "shell", run: "always", inline: "sed -i '/DEFROUTE=yes/d' #{eth0_file}"
     cc.vm.provision :ansible do |ansible|
       ansible.playbook = "$DIR/vagrant_vm/ansible/ui.yml"
       ansible.extra_vars = {
