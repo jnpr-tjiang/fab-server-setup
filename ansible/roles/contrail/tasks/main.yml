@@ -21,8 +21,8 @@
     state: directory
   delegate_to: localhost
 
-- name: Populate config/instances.yaml
+- name: Populate config/instances.yml
   template:
     src: "{{ instances_template }}"
-    dest: "{{ vagrant_root }}/config/instances.yaml"
+    dest: "{{ vagrant_root }}/config/instances.yml"
   delegate_to: localhost
