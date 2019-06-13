@@ -99,7 +99,7 @@ EOF
 
     cc.vm.network "public_network", auto_config: false, bridge: '$host_interface'
 
-    cc.vm.provision "shell", run: "always", inline: "sed -i '/DEFROUTE=yes/DEFROUTE=no/g' #{eth0_file}"
+    cc.vm.provision "shell", run: "always", inline: "sed -i 's/DEFROUTE=yes/DEFROUTE=no/g' #{eth0_file}"
     cc.vm.provision :ansible do |ansible|
       ansible.playbook = "$DIR/vagrant_vm/ansible/ui.yml"
       ansible.extra_vars = {
