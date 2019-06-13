@@ -45,6 +45,7 @@ generate_vagrantfile() {
     local vagrantdir="$user"_"$name"
 
     mkdir -p $DIR/vagrant_vm/$vagrantdir/config
+    touch $DIR/vagrant_vm/$vagrantdir/config/command_servers.yml
     cat << EOF > $DIR/vagrant_vm/$vagrantdir/Vagrantfile
 vagrant_root = File.dirname(__FILE__)
 eth0_file = "/etc/sysconfig/network-scripts/ifcfg-eth0"
