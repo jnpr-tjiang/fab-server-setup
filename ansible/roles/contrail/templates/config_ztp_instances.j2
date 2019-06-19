@@ -1,0 +1,57 @@
+global_configuration:
+  CONTAINER_REGISTRY: ci-repo.englab.juniper.net:5000
+  REGISTRY_PRIVATE_INSECURE: True
+provider_config:
+  bms:
+    ssh_user: root
+    ssh_pwd: c0ntrail123
+    ntpserver: {{ ntp_server }}
+    domainsuffix: local
+instances:
+  bms1:
+    ip: {{ vm_ip }}
+    provider: bms
+    roles:
+      config:
+      config_database:
+      control:
+      webui:
+      analytics:
+      analytics_database:
+      analytics_alarm:
+      analytics_snmp:
+      openstack_control:
+      openstack_network:
+      openstack_storage:
+      openstack_monitoring:
+  bms2:
+    ip: {{ tsn_ip }}
+    provider: bms
+    roles:
+      vrouter:
+        TSN_EVPN_MODE: true
+        VROUTER_GATEWAY: {{ vrouter_gateway }}
+contrail_configuration:
+  CONTRAIL_VERSION: {{ contrail_version }}
+  CLOUD_ORCHESTRATOR: openstack
+  RABBITMQ_NODE_PORT: 5673
+  ENCAP_PRIORITY: VXLAN,MPLSoUDP,MPLSoGRE
+  OPENSTACK_VERSION: queens
+  AUTH_MODE: keystone
+  KEYSTONE_AUTH_HOST: {{ vm_ip }}
+  KEYSTONE_AUTH_URL_VERSION: /v3
+  CONTROLLER_NODES: {{ vm_ip }}
+  CONTROL_NODES: {{ control_node }}
+  TSN_NODES: {{ tsn_node }}
+  LOG_LEVEL: SYS_DEBUG
+kolla_config:
+  kolla_globals:
+    enable_haproxy: no
+    enable_swift: yes
+    swift_disk_partition_size: 15GB
+  kolla_passwords:
+    keystone_admin_password: contrail123
+  customize:
+    nova.conf: |
+      [libvirt]
+      virt_type=qemu

@@ -62,7 +62,11 @@ Vagrant.configure("2") do |config|
           vm_domain: "contrail.juniper.net englab.juniper.net jnpr.net juniper.net",
           ntp_server: "ntp.juniper.net",
           contrail_version: contrail_version,
-          vagrant_root: vagrant_root
+          vagrant_root: vagrant_root,
+          tsn_ip: "10.87.13.2",
+          vrouter_gateway: "10.1.1.1",
+          control_node: "10.87.13.3",
+          tsn_node: "10.87.13.2"
       }
     end
 
