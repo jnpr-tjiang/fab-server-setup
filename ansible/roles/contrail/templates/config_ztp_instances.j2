@@ -28,6 +28,7 @@ instances:
     ip: {{ tsn_ip }}
     provider: bms
     roles:
+      openstack_compute:
       vrouter:
         TSN_EVPN_MODE: true
         VROUTER_GATEWAY: {{ vrouter_gateway }}
