@@ -1,6 +1,49 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require 'getoptlong'
+
+opts = GetoptLong.new(
+  [ '--tsn-ip', GetoptLong::OPTIONAL_ARGUMENT ]
+  [ '--contrail-ip', GetoptLong::OPTIONAL_ARGUMENT ]
+  [ '--command-ip', GetoptLong::OPTIONAL_ARGUMENT ]
+  [ '--netmask', GetoptLong::OPTIONAL_ARGUMENT ]
+  [ '--gateway', GetoptLong::OPTIONAL_ARGUMENT ]
+  [ '--vrouter-gateway', GetoptLong::OPTIONAL_ARGUMENT ]
+  [ '--control-node', GetoptLong::OPTIONAL_ARGUMENT ]
+  [ '--tsn-node', GetoptLong::OPTIONAL_ARGUMENT ]
+)
+
+tsn_ip = "10.87.13.2"
+contrail_ip = "10.87.13.3"
+command_ip = "10.87.13.4"
+netmask = "255.255.225.224"
+gateway = "10.87.13.30"
+vrouter_gateway = "10.1.1.1"
+control_node = "10.87.13.3"
+tsn_node = "10.87.13.2"
+
+opts.each do |opt, arg|
+  case opt
+    when '--tsn-ip'
+      tsn_ip=arg
+    when '--contrail-ip'
+      contrail_ip=arg
+    when '--command-ip'
+      command_ip=arg
+    when '--netmask'
+      netmask=arg
+    when '--gateway'
+      gateway=arg
+    when '--vrouter-gateway'
+      vrouter_gateway=arg
+    when '--control-node'
+      control_node=arg
+    when '--tsn-node'
+      tsn_node=arg
+  end
+end
+
 vagrant_root = File.dirname(__FILE__)
 contrail_version = "master-latest"
 eth0_file = "/etc/sysconfig/network-scripts/ifcfg-eth0"
@@ -23,9 +66,9 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "#{vagrant_root}/ansible/network.yml"
       ansible.extra_vars = {
           vm_interface: "eth1",
-          vm_gateway_ip: "10.87.13.30",
-          vm_ip: "10.87.13.2",
-          vm_netmask: "255.255.225.224",
+          vm_gateway_ip: gateway,
+          vm_ip: tsn_ip,
+          vm_netmask: netmask,
           vm_dns1: "10.84.5.101",
           vm_dns2: "172.21.200.60",
           vm_domain: "contrail.juniper.net englab.juniper.net jnpr.net juniper.net"
@@ -54,19 +97,19 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "#{vagrant_root}/ansible/ztp.yml"
       ansible.extra_vars = {
           vm_interface: "eth1",
-          vm_gateway_ip: "10.87.13.30",
-          vm_ip: "10.87.13.3",
-          vm_netmask: "255.255.225.224",
+          vm_gateway_ip: gateway,
+          vm_ip: contrail_ip,
+          vm_netmask: netmask,
           vm_dns1: "10.84.5.101",
           vm_dns2: "172.21.200.60",
           vm_domain: "contrail.juniper.net englab.juniper.net jnpr.net juniper.net",
           ntp_server: "ntp.juniper.net",
           contrail_version: contrail_version,
           vagrant_root: vagrant_root,
-          tsn_ip: "10.87.13.2",
-          vrouter_gateway: "10.1.1.1",
-          control_node: "10.87.13.3",
-          tsn_node: "10.87.13.2"
+          tsn_ip: tsn_ip,
+          vrouter_gateway: vrouter_gateway,
+          control_node: control_node,
+          tsn_node: tsn_node
       }
     end
 
@@ -89,9 +132,9 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "#{vagrant_root}/ansible/ui.yml"
       ansible.extra_vars = {
           vm_interface: "eth1",
-          vm_gateway_ip: "10.87.13.30",
-          vm_ip: "10.87.13.4",
-          vm_netmask: "255.255.225.224",
+          vm_gateway_ip: gateway,
+          vm_ip: command_ip,
+          vm_netmask: netmask,
           vm_dns1: "10.84.5.101",
           vm_dns2: "172.21.200.60",
           vm_domain: "contrail.juniper.net englab.juniper.net jnpr.net juniper.net",
