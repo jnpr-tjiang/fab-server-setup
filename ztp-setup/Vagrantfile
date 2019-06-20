@@ -4,13 +4,13 @@
 require 'getoptlong'
 
 opts = GetoptLong.new(
-  [ '--tsn-ip', GetoptLong::OPTIONAL_ARGUMENT ]
-  [ '--contrail-ip', GetoptLong::OPTIONAL_ARGUMENT ]
-  [ '--command-ip', GetoptLong::OPTIONAL_ARGUMENT ]
-  [ '--netmask', GetoptLong::OPTIONAL_ARGUMENT ]
-  [ '--gateway', GetoptLong::OPTIONAL_ARGUMENT ]
-  [ '--vrouter-gateway', GetoptLong::OPTIONAL_ARGUMENT ]
-  [ '--control-node', GetoptLong::OPTIONAL_ARGUMENT ]
+  [ '--tsn-ip', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--contrail-ip', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--command-ip', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--netmask', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--gateway', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--vrouter-gateway', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--control-node', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--tsn-node', GetoptLong::OPTIONAL_ARGUMENT ]
 )
 
